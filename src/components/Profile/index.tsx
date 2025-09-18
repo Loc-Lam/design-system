@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Edit,
   ChevronDown,
   User,
   Settings,
@@ -11,14 +10,7 @@ import {
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
-type ColorTheme =
-  | 'default'
-  | 'blue'
-  | 'green'
-  | 'purple'
-  | 'red'
-  | 'orange'
-  | 'dark';
+type ColorTheme = 'default' | 'blue' | 'green' | 'purple' | 'red' | 'orange';
 
 const colorThemes = {
   default: {
@@ -110,21 +102,6 @@ const colorThemes = {
     dropdownBorder: 'border-orange-200',
     skillBg: 'bg-orange-100 text-orange-800',
     dangerText: 'text-red-600',
-  },
-  dark: {
-    background: 'bg-gray-900',
-    text: 'text-white',
-    mutedText: 'text-gray-300',
-    labelText: 'text-gray-400',
-    border: 'border-gray-700',
-    cardBg: 'bg-gray-800',
-    button: 'bg-blue-600 hover:bg-blue-700 text-white',
-    secondaryButton: 'bg-gray-700 hover:bg-gray-600 text-white',
-    dropdownBg: 'bg-gray-800',
-    dropdownHover: 'hover:bg-gray-700',
-    dropdownBorder: 'border-gray-600',
-    skillBg: 'bg-gray-700 text-gray-200',
-    dangerText: 'text-red-400',
   },
 };
 
