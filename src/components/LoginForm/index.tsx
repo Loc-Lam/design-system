@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Mail, Lock } from 'lucide-react';
 
 type ColorTheme = 'default' | 'blue' | 'green' | 'purple' | 'red' | 'orange';
+type Layout = 'single' | 'double';
 
 const colorThemes = {
   default: {
@@ -113,6 +114,7 @@ export interface LoginProps {
   onCreateAccount?: () => void;
   className?: string;
   colorTheme?: ColorTheme;
+  layout?: Layout;
   isLoading?: boolean;
   errors?: {
     email?: string;
@@ -128,6 +130,7 @@ const LoginForm = ({
   onCreateAccount,
   className = '',
   colorTheme = 'default',
+  layout = 'single',
   isLoading = false,
   errors,
   success,
@@ -153,10 +156,14 @@ const LoginForm = ({
       }
     }
   };
+  const containerWidth = layout === 'double' ? 'max-w-2xl' : 'max-w-md';
+  const formLayout =
+    layout === 'double' ? 'grid grid-cols-1 md:grid-cols-2 gap-6' : 'space-y-6';
+
   return (
     <div
       data-id={dataId}
-      className={`w-full max-w-md mx-auto p-6 sm:p-8 ${theme.background} rounded-lg sm:rounded-2xl shadow-sm ${className}`}
+      className={`w-full ${containerWidth} mx-auto p-6 sm:p-8 ${theme.background} rounded-lg sm:rounded-2xl shadow-sm ${className}`}
     >
       <h1 className={`text-4xl font-bold ${theme.text} mb-8`}>Welcome!</h1>
 
@@ -180,138 +187,144 @@ const LoginForm = ({
         </div>
       )}
 
-      <form onSubmit={handleSubmit} className="space-y-6" noValidate>
-        <div>
-          <label
-            htmlFor="email"
-            className={`block text-sm font-medium ${theme.text} mb-2`}
-          >
-            Your email{' '}
-            <span className={theme.accent} aria-label="required">
-              *
-            </span>
-          </label>
-          <div className="relative">
-            <Mail
-              className={`absolute left-4 top-1/2 transform -translate-y-1/2 ${theme.mutedText} w-5 h-5`}
-              aria-hidden="true"
-            />
-            <input
-              id="email"
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email"
-              required
-              disabled={loading}
-              aria-invalid={errors?.email ? 'true' : 'false'}
-              aria-describedby={errors?.email ? 'email-error' : undefined}
-              className={`w-full pl-12 pr-4 py-4 ${theme.input} border rounded-2xl focus:outline-none transition-colors ${errors?.email ? theme.inputError : theme.inputFocus} ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            />
+      <form onSubmit={handleSubmit} noValidate>
+        <div className={formLayout}>
+          <div>
+            <label
+              htmlFor="email"
+              className={`block text-sm font-medium ${theme.text} mb-2`}
+            >
+              Your email{' '}
+              <span className={theme.accent} aria-label="required">
+                *
+              </span>
+            </label>
+            <div className="relative">
+              <Mail
+                className={`absolute left-4 top-1/2 transform -translate-y-1/2 ${theme.mutedText} w-5 h-5`}
+                aria-hidden="true"
+              />
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                required
+                disabled={loading}
+                aria-invalid={errors?.email ? 'true' : 'false'}
+                aria-describedby={errors?.email ? 'email-error' : undefined}
+                className={`w-full pl-12 pr-4 py-4 ${theme.input} border rounded-2xl focus:outline-none transition-colors ${errors?.email ? theme.inputError : theme.inputFocus} ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              />
+            </div>
+            {errors?.email && (
+              <p
+                id="email-error"
+                className={`mt-1 text-sm ${theme.error}`}
+                role="alert"
+              >
+                {errors.email}
+              </p>
+            )}
           </div>
-          {errors?.email && (
-            <p
-              id="email-error"
-              className={`mt-1 text-sm ${theme.error}`}
-              role="alert"
+          <div>
+            <label
+              htmlFor="password"
+              className={`block text-sm font-medium ${theme.text} mb-2`}
             >
-              {errors.email}
-            </p>
-          )}
-        </div>
-        <div>
-          <label
-            htmlFor="password"
-            className={`block text-sm font-medium ${theme.text} mb-2`}
-          >
-            Your password{' '}
-            <span className={theme.accent} aria-label="required">
-              *
-            </span>
-          </label>
-          <div className="relative">
-            <Lock
-              className={`absolute left-4 top-1/2 transform -translate-y-1/2 ${theme.mutedText} w-5 h-5`}
-              aria-hidden="true"
-            />
-            <input
-              id="password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••••"
-              required
-              disabled={loading}
-              aria-invalid={errors?.password ? 'true' : 'false'}
-              aria-describedby={errors?.password ? 'password-error' : undefined}
-              className={`w-full pl-12 pr-4 py-4 ${theme.input} border rounded-2xl focus:outline-none transition-colors ${errors?.password ? theme.inputError : theme.inputFocus} ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
-            />
+              Your password{' '}
+              <span className={theme.accent} aria-label="required">
+                *
+              </span>
+            </label>
+            <div className="relative">
+              <Lock
+                className={`absolute left-4 top-1/2 transform -translate-y-1/2 ${theme.mutedText} w-5 h-5`}
+                aria-hidden="true"
+              />
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••••"
+                required
+                disabled={loading}
+                aria-invalid={errors?.password ? 'true' : 'false'}
+                aria-describedby={
+                  errors?.password ? 'password-error' : undefined
+                }
+                className={`w-full pl-12 pr-4 py-4 ${theme.input} border rounded-2xl focus:outline-none transition-colors ${errors?.password ? theme.inputError : theme.inputFocus} ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
+              />
+            </div>
+            {errors?.password && (
+              <p
+                id="password-error"
+                className={`mt-1 text-sm ${theme.error}`}
+                role="alert"
+              >
+                {errors.password}
+              </p>
+            )}
           </div>
-          {errors?.password && (
-            <p
-              id="password-error"
-              className={`mt-1 text-sm ${theme.error}`}
-              role="alert"
-            >
-              {errors.password}
-            </p>
-          )}
         </div>
-        <div className="flex items-center justify-between">
-          <label className="flex items-center space-x-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-              className={`w-4 h-4 ${theme.accent} ${theme.background} border rounded focus:ring-2 ${theme.buttonFocus} disabled:opacity-50`}
+        <div className={`mt-6 ${layout === 'double' ? 'md:col-span-2' : ''}`}>
+          <div className="flex items-center justify-between mb-6">
+            <label className="flex items-center space-x-2 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
+                className={`w-4 h-4 ${theme.accent} ${theme.background} border rounded focus:ring-2 ${theme.buttonFocus} disabled:opacity-50`}
+                disabled={loading}
+              />
+              <span
+                className={`text-sm ${theme.text} ${loading ? 'opacity-50' : ''}`}
+              >
+                Remember me
+              </span>
+            </label>
+            <button
+              type="button"
+              onClick={onForgotPassword}
+              className={`text-sm ${theme.link} transition-colors ${loading ? 'opacity-50 pointer-events-none' : ''}`}
               disabled={loading}
-            />
-            <span
-              className={`text-sm ${theme.text} ${loading ? 'opacity-50' : ''}`}
             >
-              Remember me
-            </span>
-          </label>
+              Forgot password?
+            </button>
+          </div>
           <button
-            type="button"
-            onClick={onForgotPassword}
-            className={`text-sm ${theme.link} transition-colors ${loading ? 'opacity-50 pointer-events-none' : ''}`}
+            type="submit"
             disabled={loading}
+            className={`w-full ${loading ? theme.buttonLoading : theme.button} font-medium py-4 px-4 rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 ${theme.buttonFocus} focus:ring-offset-2 flex items-center justify-center gap-2`}
           >
-            Forgot password?
+            {loading && (
+              <svg
+                className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                ></path>
+              </svg>
+            )}
+            {loading ? 'Signing in...' : 'Sign in'}
           </button>
         </div>
-        <button
-          type="submit"
-          disabled={loading}
-          className={`w-full ${loading ? theme.buttonLoading : theme.button} font-medium py-4 px-4 rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 ${theme.buttonFocus} focus:ring-offset-2 flex items-center justify-center gap-2`}
-        >
-          {loading && (
-            <svg
-              className="animate-spin -ml-1 mr-2 h-4 w-4 text-white"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-            >
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-              ></circle>
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              ></path>
-            </svg>
-          )}
-          {loading ? 'Signing in...' : 'Sign in'}
-        </button>
       </form>
-      <div className="mt-4 flex gap-15">
+      <div className="mt-4 flex gap-4">
         <span className={`${theme.mutedText} text-sm`}>Not registered? </span>
         <button
           onClick={onCreateAccount}
