@@ -1,0 +1,179 @@
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 20px 0;
+}
+
+.timeline-item {
+  display: flex;
+  position: relative;
+  padding-bottom: 32px;
+}
+
+.timeline-item:last-child {
+  padding-bottom: 0;
+}
+
+.timeline-marker {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 20px;
+  flex-shrink: 0;
+}
+
+.timeline-marker-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #e5e7eb;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 1px #e5e7eb;
+  z-index: 1;
+  margin-top: 6px;
+}
+
+.timeline-marker-line {
+  position: absolute;
+  top: 18px;
+  width: 1px;
+  height: calc(100% + 32px);
+  background-color: #e5e7eb;
+}
+
+.timeline-content {
+  flex: 1;
+  padding-top: 0;
+}
+
+.timeline-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #6b7280;
+  font-size: 14px;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
+.timeline-date-icon {
+  width: 16px;
+  height: 16px;
+  color: #9ca3af;
+}
+
+.timeline-title {
+  font-size: 18px;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+}
+
+.timeline-description {
+  color: #6b7280;
+  font-size: 15px;
+  line-height: 1.6;
+  margin: 0 0 16px 0;
+}
+
+.timeline-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.timeline-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  line-height: 1.2;
+}
+
+.timeline-button--primary {
+  background-color: #374151;
+  color: #ffffff;
+}
+
+.timeline-button--primary:hover {
+  background-color: #1f2937;
+}
+
+.timeline-button--secondary {
+  background-color: #ffffff;
+  color: #374151;
+  border: 1px solid #e5e7eb;
+}
+
+.timeline-button--secondary:hover {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.timeline-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.timeline-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background-color: #f3f4f6;
+  color: #4b5563;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.timeline-tag svg {
+  width: 6px;
+  height: 6px;
+  color: #9ca3af;
+}
+
+.timeline--compact .timeline-item {
+  padding-bottom: 20px;
+}
+
+.timeline--compact .timeline-title {
+  font-size: 16px;
+}
+
+.timeline--compact .timeline-description {
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+
+.timeline--compact .timeline-button {
+  padding: 6px 12px;
+  font-size: 13px;
+}
+
+@media (max-width: 640px) {
+  .timeline-marker {
+    margin-right: 16px;
+  }
+
+  .timeline-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .timeline-button {
+    width: 100%;
+    justify-content: center;
+  }
+}
