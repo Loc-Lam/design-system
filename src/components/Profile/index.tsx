@@ -11,6 +11,7 @@ import {
 import { cn } from '@/lib/utils';
 
 type ColorTheme = 'default' | 'blue' | 'green' | 'purple' | 'red' | 'orange';
+type Layout = 'single' | 'double';
 
 const colorThemes = {
   default: {
@@ -138,8 +139,8 @@ interface UserProfile {
 
 interface ProfileProps {
   'data-id'?: string;
-  userProfile?: UserProfile;
-  isTwoColumn?: boolean;
+  userProfile?: UserProfile | null;
+  layout?: Layout;
   onLogout?: () => void;
   colorTheme?: ColorTheme;
   isLoading?: boolean;
@@ -149,7 +150,7 @@ interface ProfileProps {
 const Profile = ({
   'data-id': dataId,
   userProfile,
-  isTwoColumn = false,
+  layout = 'single',
   onLogout,
   colorTheme = 'default',
   isLoading = false,
@@ -373,13 +374,13 @@ const Profile = ({
       <div
         className={cn(
           'flex flex-col gap-6 align-top items-start',
-          isTwoColumn ? 'md:flex-row' : ''
+          layout === 'double' ? 'md:flex-row' : ''
         )}
       >
         <div
           className={cn(
             'flex flex-col gap-6 w-full flex-1',
-            isTwoColumn ? 'flex-2' : ''
+            layout === 'double' ? 'flex-2' : ''
           )}
         >
           {/* Personal Information Section */}
