@@ -1,4 +1,4 @@
-import React, { useState, type ComponentType } from "react";
+import { useState, type ComponentType } from "react";
 import {
 	ChevronLeft,
 	ChevronRight,
@@ -105,7 +105,7 @@ export function Sidebar({
 				<div className="md:hidden fixed top-4 left-4 z-50">
 					<button
 						onClick={toggleMobileMenu}
-						className="p-3 rounded-lg bg-card border border-border shadow-lg hover:bg-accent hover:text-accent-foreground transition-colors"
+						className="p-3 rounded-lg bg-card border border-border shadow-lg hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
 						aria-label="Toggle menu"
 					>
 						{isMobileMenuOpen ? (
@@ -154,7 +154,7 @@ export function Sidebar({
 						{/* Hide collapse button on mobile */}
 						<button
 							onClick={toggleCollapsed}
-							className="hidden md:block p-2 rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors"
+							className="hidden md:block p-2 rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
 							aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
 						>
 							{isCollapsed ? (
@@ -166,7 +166,7 @@ export function Sidebar({
 						{/* Close button for mobile full screen */}
 						<button
 							onClick={() => setIsMobileMenuOpen(false)}
-							className="md:hidden p-2 rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors"
+							className="md:hidden p-2 rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
 							aria-label="Close menu"
 						>
 							<X className="w-5 h-5" />
@@ -181,7 +181,7 @@ export function Sidebar({
           <button
             onClick={() => handleItemClick(item)}
             className={cn(
-              'w-full relative flex items-center space-x-3 py-3 rounded-lg text-sm font-medium transition-colors',
+              'w-full relative flex items-center space-x-3 py-3 rounded-lg text-sm font-medium transition-colors cursor-pointer',
               'hover:bg-accent hover:text-accent-foreground',
               'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
               activeItem === item.id
@@ -234,9 +234,9 @@ export function Sidebar({
                       <button
                         key={child.id}
                         onClick={() => handleItemClick(child)}
-                        className="w-full flex items-center space-x-3 px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                        className="w-full flex items-center space-x-3 px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer"
                       >
-                        <ChildIconComponent className="w-5 h-5 flex-shrink-0" />
+                        {ChildIconComponent && <ChildIconComponent className="w-5 h-5 flex-shrink-0" />}
                         <span className="flex-1 text-left">{child.label}</span>
                       </button>
                     );

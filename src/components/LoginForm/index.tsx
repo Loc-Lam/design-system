@@ -165,13 +165,14 @@ const LoginForm = ({
       data-id={dataId}
       className={`w-full ${containerWidth} mx-auto p-6 sm:p-8 ${theme.background} rounded-lg sm:rounded-2xl shadow-sm ${className}`}
     >
-      <h1 className={`text-4xl font-bold ${theme.text} mb-8`}>Welcome!</h1>
+      <h1 className={`text-4xl font-bold ${theme.text} mb-8`} id="login-heading">Welcome!</h1>
 
       {/* Success Message */}
       {success && (
         <div
           className={`mb-4 p-3 rounded-lg bg-green-50 border border-green-200`}
           role="alert"
+          aria-live="polite"
         >
           <p className={`text-sm ${theme.success}`}>{success}</p>
         </div>
@@ -182,12 +183,13 @@ const LoginForm = ({
         <div
           className={`mb-4 p-3 rounded-lg bg-red-50 border border-red-200`}
           role="alert"
+          aria-live="polite"
         >
           <p className={`text-sm ${theme.error}`}>{errors.general}</p>
         </div>
       )}
 
-      <form onSubmit={handleSubmit} noValidate>
+      <form onSubmit={handleSubmit} noValidate aria-labelledby="login-heading">
         <div className={formLayout}>
           <div>
             <label
@@ -195,7 +197,7 @@ const LoginForm = ({
               className={`block text-sm font-medium ${theme.text} mb-2`}
             >
               Your email{' '}
-              <span className={theme.accent} aria-label="required">
+              <span className={theme.accent} aria-label="required field">
                 *
               </span>
             </label>
@@ -214,6 +216,7 @@ const LoginForm = ({
                 disabled={loading}
                 aria-invalid={errors?.email ? 'true' : 'false'}
                 aria-describedby={errors?.email ? 'email-error' : undefined}
+                autoComplete="email"
                 className={`w-full pl-12 pr-4 py-4 ${theme.input} border rounded-2xl focus:outline-none transition-colors ${errors?.email ? theme.inputError : theme.inputFocus} ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
               />
             </div>
@@ -233,7 +236,7 @@ const LoginForm = ({
               className={`block text-sm font-medium ${theme.text} mb-2`}
             >
               Your password{' '}
-              <span className={theme.accent} aria-label="required">
+              <span className={theme.accent} aria-label="required field">
                 *
               </span>
             </label>
@@ -254,6 +257,7 @@ const LoginForm = ({
                 aria-describedby={
                   errors?.password ? 'password-error' : undefined
                 }
+                autoComplete="current-password"
                 className={`w-full pl-12 pr-4 py-4 ${theme.input} border rounded-2xl focus:outline-none transition-colors ${errors?.password ? theme.inputError : theme.inputFocus} ${loading ? 'opacity-50 cursor-not-allowed' : ''}`}
               />
             </div>
@@ -270,8 +274,9 @@ const LoginForm = ({
         </div>
         <div className={`mt-6 ${layout === 'double' ? 'md:col-span-2' : ''}`}>
           <div className="flex items-center justify-between mb-6">
-            <label className="flex items-center space-x-2 cursor-pointer">
+            <label className="flex items-center space-x-2 cursor-pointer" htmlFor="remember-me">
               <input
+                id="remember-me"
                 type="checkbox"
                 checked={rememberMe}
                 onChange={(e) => setRememberMe(e.target.checked)}
@@ -287,8 +292,9 @@ const LoginForm = ({
             <button
               type="button"
               onClick={onForgotPassword}
-              className={`text-sm ${theme.link} transition-colors ${loading ? 'opacity-50 pointer-events-none' : ''}`}
+              className={`text-sm ${theme.link} transition-colors cursor-pointer ${loading ? 'opacity-50 pointer-events-none' : ''}`}
               disabled={loading}
+              aria-label="Reset your password"
             >
               Forgot password?
             </button>
@@ -296,7 +302,8 @@ const LoginForm = ({
           <button
             type="submit"
             disabled={loading}
-            className={`w-full ${loading ? theme.buttonLoading : theme.button} font-medium py-4 px-4 rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 ${theme.buttonFocus} focus:ring-offset-2 flex items-center justify-center gap-2`}
+            className={`w-full ${loading ? theme.buttonLoading : theme.button} font-medium py-4 px-4 rounded-2xl transition-all duration-200 focus:outline-none focus:ring-2 ${theme.buttonFocus} focus:ring-offset-2 flex items-center justify-center gap-2 cursor-pointer`}
+            aria-describedby={loading ? 'loading-status' : undefined}
           >
             {loading && (
               <svg
@@ -304,6 +311,7 @@ const LoginForm = ({
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
+                aria-hidden="true"
               >
                 <circle
                   className="opacity-25"
@@ -320,7 +328,9 @@ const LoginForm = ({
                 ></path>
               </svg>
             )}
-            {loading ? 'Signing in...' : 'Sign in'}
+            <span id={loading ? 'loading-status' : undefined}>
+              {loading ? 'Signing in...' : 'Sign in'}
+            </span>
           </button>
         </div>
       </form>
@@ -328,8 +338,9 @@ const LoginForm = ({
         <span className={`${theme.mutedText} text-sm`}>Not registered? </span>
         <button
           onClick={onCreateAccount}
-          className={`cursor-pointer text-sm ${theme.link} transition-colors font-medium ${loading ? 'opacity-50 pointer-events-none' : ''}`}
+          className={`text-sm ${theme.link} transition-colors font-medium cursor-pointer ${loading ? 'opacity-50 pointer-events-none' : ''}`}
           disabled={loading}
+          aria-label="Create a new account"
         >
           Create account
         </button>

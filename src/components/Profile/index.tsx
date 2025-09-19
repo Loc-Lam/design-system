@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import {
   ChevronDown,
   User,
@@ -154,25 +154,36 @@ const Profile = ({
   onLogout,
   colorTheme = 'default',
   isLoading = false,
-  onEditProfile,
   onSaveProfile,
 }: ProfileProps) => {
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [editModes, setEditModes] = useState({
+  const [editModes, setEditModes] = useState<{
+    personal: boolean;
+    address: boolean;
+    payment: boolean;
+  }>({
     personal: false,
     address: false,
     payment: false,
   });
   const [editData, setEditData] = useState<any>({});
-  const [saving, setSaving] = useState({
+  const [saving, setSaving] = useState<{
+    personal: boolean;
+    address: boolean;
+    payment: boolean;
+  }>({
     personal: false,
     address: false,
     payment: false,
   });
-  const [errors, setErrors] = useState<any>({});
+  const [errors, setErrors] = useState<{
+    personal?: any;
+    address?: any;
+    payment?: any;
+  }>({});
 
   const handleEditToggle = (section: 'personal' | 'address' | 'payment') => {
-    setEditModes((prev) => ({
+    setEditModes((prev: any) => ({
       ...prev,
       [section]: !prev[section],
     }));
@@ -180,7 +191,7 @@ const Profile = ({
     if (!editModes[section]) {
       // Initialize edit data when entering edit mode
       if (section === 'personal') {
-        setEditData((prev) => ({
+        setEditData((prev: any) => ({
           ...prev,
           personal: {
             firstName:
@@ -199,7 +210,7 @@ const Profile = ({
           },
         }));
       } else if (section === 'address') {
-        setEditData((prev) => ({
+        setEditData((prev: any) => ({
           ...prev,
           address: {
             street1: userProfile?.address?.street1 || '',
@@ -212,7 +223,7 @@ const Profile = ({
           },
         }));
       } else if (section === 'payment') {
-        setEditData((prev) => ({
+        setEditData((prev: any) => ({
           ...prev,
           payment: {
             cardNumber: userProfile?.payment?.cardNumber || '',
@@ -260,7 +271,7 @@ const Profile = ({
   };
 
   const handleFieldChange = (section: string, field: string, value: any) => {
-    setEditData((prev) => ({
+    setEditData((prev: any) => ({
       ...prev,
       [section]: {
         ...prev[section],
@@ -269,13 +280,6 @@ const Profile = ({
     }));
   };
 
-  const handleEditProfile = () => {
-    if (onEditProfile) {
-      onEditProfile();
-    } else {
-      alert('Edit profile functionality would be implemented here');
-    }
-  };
 
   const theme = colorThemes[colorTheme];
 
@@ -326,7 +330,7 @@ const Profile = ({
         <div className="flex items-center gap-4">
           <img
             src={userProfile.avatar}
-            alt="Profile"
+            alt={`Profile picture of ${userProfile.fullName}`}
             className="w-16 h-16 rounded-full object-cover"
           />
           <h1 className={`text-2xl font-semibold ${theme.text}`}>
@@ -346,12 +350,17 @@ const Profile = ({
             className={cn(
               `flex items-center gap-2 px-4 py-2 ${theme.secondaryButton} rounded-lg transition-colors cursor-pointer`
             )}
+            aria-label="Open profile menu"
+            aria-expanded={dropdownOpen}
+            aria-haspopup="menu"
           >
             <ChevronDown className="w-4 h-4" />
           </button>
           {dropdownOpen && (
             <div
               className={`absolute right-0 top-full mt-2 w-48 ${theme.dropdownBg} border ${theme.dropdownBorder} rounded-lg shadow-lg z-10`}
+              role="menu"
+              aria-label="Profile menu"
             >
               {dropdownItems.map((item, index) => (
                 <button
@@ -361,6 +370,8 @@ const Profile = ({
                     setDropdownOpen(false);
                   }}
                   className={`w-full flex items-center gap-3 px-4 py-3 text-left ${theme.dropdownHover} transition-colors first:rounded-t-lg last:rounded-b-lg ${item.danger ? theme.dangerText : theme.mutedText}`}
+                  role="menuitem"
+                  aria-label={item.label}
                 >
                   <item.icon className="w-4 h-4" />
                   {item.label}
@@ -388,7 +399,7 @@ const Profile = ({
             className={`p-4 border ${theme.border} ${theme.cardBg} rounded-2xl`}
           >
             <div className="flex justify-between items-center mb-4">
-              <h2 className={`text-lg font-semibold ${theme.text}`}>
+              <h2 className={`text-lg font-semibold ${theme.text}`} id="personal-info-heading">
                 Personal Information
               </h2>
               <div className="flex gap-2">
@@ -396,15 +407,17 @@ const Profile = ({
                   <>
                     <button
                       onClick={() => handleCancel('personal')}
-                      className={`px-3 py-1 text-sm border ${theme.border} ${theme.secondaryButton} rounded-lg transition-colors`}
+                      className={`px-3 py-1 text-sm border ${theme.border} ${theme.secondaryButton} rounded-lg transition-colors cursor-pointer`}
                       disabled={saving.personal}
+                      aria-label="Cancel personal information editing"
                     >
                       Cancel
                     </button>
                     <button
                       onClick={() => handleSave('personal')}
-                      className={`px-3 py-1 text-sm ${theme.button} rounded-lg transition-colors disabled:opacity-50`}
+                      className={`px-3 py-1 text-sm ${theme.button} rounded-lg transition-colors disabled:opacity-50 cursor-pointer`}
                       disabled={saving.personal}
+                      aria-label="Save personal information changes"
                     >
                       {saving.personal ? 'Saving...' : 'Save Changes'}
                     </button>
@@ -412,8 +425,9 @@ const Profile = ({
                 ) : (
                   <button
                     onClick={() => handleEditToggle('personal')}
-                    className={`px-3 py-1 text-sm ${theme.button} rounded-lg transition-colors`}
+                    className={`px-3 py-1 text-sm ${theme.button} rounded-lg transition-colors cursor-pointer`}
                     disabled={isLoading}
+                    aria-label="Edit personal information"
                   >
                     Edit
                   </button>
@@ -422,7 +436,7 @@ const Profile = ({
             </div>
 
             {errors.personal?.general && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg" role="alert" aria-live="polite">
                 <p className="text-sm text-red-600">
                   {errors.personal.general}
                 </p>
@@ -451,9 +465,11 @@ const Profile = ({
                       }
                       className={`w-full px-3 py-2 border ${errors.personal?.firstName ? 'border-red-500' : theme.border} rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
                       required
+                      aria-describedby={errors.personal?.firstName ? 'firstName-error' : undefined}
+                      aria-invalid={errors.personal?.firstName ? 'true' : 'false'}
                     />
                     {errors.personal?.firstName && (
-                      <p className="mt-1 text-sm text-red-600">
+                      <p id="firstName-error" className="mt-1 text-sm text-red-600" role="alert">
                         {errors.personal.firstName}
                       </p>
                     )}
@@ -639,7 +655,7 @@ const Profile = ({
             className={`p-4 border ${theme.border} ${theme.cardBg} rounded-2xl`}
           >
             <div className="flex justify-between items-center mb-4">
-              <h2 className={`text-lg font-semibold ${theme.text}`}>
+              <h2 className={`text-lg font-semibold ${theme.text}`} id="address-info-heading">
                 Address Information
               </h2>
               <div className="flex gap-2">
@@ -647,14 +663,14 @@ const Profile = ({
                   <>
                     <button
                       onClick={() => handleCancel('address')}
-                      className={`px-3 py-1 text-sm border ${theme.border} ${theme.secondaryButton} rounded-lg transition-colors`}
+                      className={`px-3 py-1 text-sm border ${theme.border} ${theme.secondaryButton} rounded-lg transition-colors cursor-pointer`}
                       disabled={saving.address}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={() => handleSave('address')}
-                      className={`px-3 py-1 text-sm ${theme.button} rounded-lg transition-colors disabled:opacity-50`}
+                      className={`px-3 py-1 text-sm ${theme.button} rounded-lg transition-colors disabled:opacity-50 cursor-pointer`}
                       disabled={saving.address}
                     >
                       {saving.address ? 'Saving...' : 'Save Changes'}
@@ -663,7 +679,7 @@ const Profile = ({
                 ) : (
                   <button
                     onClick={() => handleEditToggle('address')}
-                    className={`px-3 py-1 text-sm ${theme.button} rounded-lg transition-colors`}
+                    className={`px-3 py-1 text-sm ${theme.button} rounded-lg transition-colors cursor-pointer`}
                     disabled={isLoading}
                   >
                     Edit
@@ -937,7 +953,7 @@ const Profile = ({
           className={`p-4 border ${theme.border} ${theme.cardBg} rounded-2xl flex-1 w-full`}
         >
           <div className="flex justify-between items-center mb-4">
-            <h2 className={`text-lg font-semibold ${theme.text}`}>
+            <h2 className={`text-lg font-semibold ${theme.text}`} id="payment-info-heading">
               Payment Information
             </h2>
             <div className="flex gap-2">
@@ -1195,6 +1211,7 @@ const Profile = ({
         <div
           className="fixed inset-0 z-0"
           onClick={() => setDropdownOpen(false)}
+          aria-hidden="true"
         />
       )}
     </div>
