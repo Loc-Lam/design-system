@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import LoginForm from './components/LoginForm';
 import Profile from './components/Profile';
 import { ExpandableSidebar } from './components/ExpandableSidebar';
+import { TaskifyApp } from './taskify/TaskifyApp';
 import './App.css';
 
 // Mock user database based on user story requirements
@@ -258,6 +259,11 @@ function App() {
                 label: 'Profile',
                 onClick: () => setCurrentView('profile'),
               },
+              {
+                id: 'taskify',
+                label: 'Taskify',
+                onClick: () => setCurrentView('taskify'),
+              },
             ]
           : []),
       ],
@@ -296,11 +302,19 @@ function App() {
     if (currentView === 'login' && !isAuthenticated) {
       return (
         <div className="flex justify-center items-center h-screen">
-          <LoginForm
-            onSignIn={handleSignIn}
-            onForgotPassword={handleForgotPassword}
-            onCreateAccount={handleCreateAccount}
-          />
+          <div className="flex flex-col items-center space-y-4">
+            <LoginForm
+              onSignIn={handleSignIn}
+              onForgotPassword={handleForgotPassword}
+              onCreateAccount={handleCreateAccount}
+            />
+            <button
+              onClick={() => setCurrentView('taskify')}
+              className="px-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
+            >
+              Launch Taskify (No Login Required)
+            </button>
+          </div>
         </div>
       );
     }
@@ -313,6 +327,10 @@ function App() {
           onSaveProfile={handleSaveProfile}
         />
       );
+    }
+
+    if (currentView === 'taskify') {
+      return <TaskifyApp />;
     }
 
     return null;
