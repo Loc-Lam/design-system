@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import LoginForm from './components/LoginForm';
 import Profile from './components/Profile';
+import { PaymentRequestPage } from './components/PaymentRequest';
 import { ExpandableSidebar } from './components/ExpandableSidebar';
 import './App.css';
 
@@ -258,6 +259,11 @@ function App() {
                 label: 'Profile',
                 onClick: () => setCurrentView('profile'),
               },
+              {
+                id: 'payment-requests',
+                label: 'Payment Requests',
+                onClick: () => setCurrentView('payment-requests'),
+              },
             ]
           : []),
       ],
@@ -312,6 +318,14 @@ function App() {
           onLogout={handleLogout}
           onSaveProfile={handleSaveProfile}
         />
+      );
+    }
+
+    if (currentView === 'payment-requests' && isAuthenticated) {
+      return (
+        <div className="p-6">
+          <PaymentRequestPage />
+        </div>
       );
     }
 
