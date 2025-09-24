@@ -1,8 +1,11 @@
 import { useState } from 'react';
-import { X, Filter, Calendar, DollarSign, Tag, Flag, CreditCard, Check } from 'lucide-react';
+import { X, Filter, Calendar, DollarSign, Tag, Flag, CreditCard } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/common/button';
 import { FormField, TextInput, Checkbox } from '@/components/common/form-field';
+import { Select, SelectContent, SelectItem } from '@/components/ui/select';
+import { DatePicker } from '@/components/ui/date-picker';
+import { MultiSelect } from '@/components/ui/multi-select';
 import type {
   PaymentRequestFilters,
   PaymentStatus,
@@ -24,13 +27,13 @@ interface FilterPanelProps {
 const STATUS_OPTIONS: Array<{ value: PaymentStatus; label: string; color: string }> = [
   { value: 'draft', label: 'Draft', color: 'bg-gray-100 text-gray-700' },
   { value: 'submitted', label: 'Submitted', color: 'bg-blue-100 text-blue-700' },
-  { value: 'pending_approval', label: 'Pending Approval', color: 'bg-yellow-100 text-yellow-700' },
-  { value: 'approved', label: 'Approved', color: 'bg-green-100 text-green-700' },
-  { value: 'rejected', label: 'Rejected', color: 'bg-red-100 text-red-700' },
-  { value: 'processing', label: 'Processing', color: 'bg-purple-100 text-purple-700' },
-  { value: 'completed', label: 'Completed', color: 'bg-green-100 text-green-700' },
+  { value: 'pending_approval', label: 'Pending Approval', color: 'bg-blue-100 text-blue-700' },
+  { value: 'approved', label: 'Approved', color: 'bg-blue-100 text-blue-700' },
+  { value: 'rejected', label: 'Rejected', color: 'bg-blue-100 text-blue-700' },
+  { value: 'processing', label: 'Processing', color: 'bg-blue-100 text-blue-700' },
+  { value: 'completed', label: 'Completed', color: 'bg-blue-100 text-blue-700' },
   { value: 'cancelled', label: 'Cancelled', color: 'bg-gray-100 text-gray-700' },
-  { value: 'on_hold', label: 'On Hold', color: 'bg-orange-100 text-orange-700' },
+  { value: 'on_hold', label: 'On Hold', color: 'bg-blue-100 text-blue-700' },
 ];
 
 const CATEGORY_OPTIONS: Array<{ value: PaymentCategory; label: string; icon: React.ReactNode }> = [
@@ -53,10 +56,10 @@ const METHOD_OPTIONS: Array<{ value: PaymentMethod; label: string }> = [
 ];
 
 const PRIORITY_OPTIONS: Array<{ value: PaymentPriority; label: string; color: string }> = [
-  { value: 'low', label: 'Low', color: 'bg-gray-100 text-gray-700' },
-  { value: 'normal', label: 'Normal', color: 'bg-blue-100 text-blue-700' },
-  { value: 'high', label: 'High', color: 'bg-orange-100 text-orange-700' },
-  { value: 'urgent', label: 'Urgent', color: 'bg-red-100 text-red-700' },
+  { value: 'low', label: 'Low', color: 'bg-gray-500' },
+  { value: 'normal', label: 'Normal', color: 'bg-blue-500' },
+  { value: 'high', label: 'High', color: 'bg-orange-500' },
+  { value: 'urgent', label: 'Urgent', color: 'bg-blue-500' },
 ];
 
 export default function FilterPanel({
@@ -74,17 +77,17 @@ export default function FilterPanel({
     setLocalFilters(prev => ({ ...prev, [key]: value }));
   };
 
-  const toggleArrayFilter = <T extends string>(
-    key: keyof PaymentRequestFilters,
-    value: T,
-    currentArray?: T[]
+  const toggleArrayFilter = <K extends keyof PaymentRequestFilters>(
+    key: K,
+    value: string,
+    currentArray?: string[]
   ) => {
     const array = currentArray || [];
     const newArray = array.includes(value)
       ? array.filter(item => item !== value)
       : [...array, value];
 
-    updateFilter(key as any, newArray.length > 0 ? newArray : undefined);
+    updateFilter(key, newArray.length > 0 ? newArray as PaymentRequestFilters[K] : undefined);
   };
 
   const applyFilters = () => {
@@ -134,63 +137,40 @@ export default function FilterPanel({
           <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6">
             {/* Status Filter */}
             <div className="space-y-3">
-              <h3 className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                <Check className="w-4 h-4" />
-                Status
-              </h3>
-              <div className="grid grid-cols-2 gap-2">
-                {STATUS_OPTIONS.map(option => {
-                  const isSelected = localFilters.status?.includes(option.value);
-                  return (
-                    <button
-                      key={option.value}
-                      onClick={() => toggleArrayFilter('status', option.value, localFilters.status)}
-                      className={cn(
-                        "px-3 py-2 text-sm rounded-lg border transition-all text-left",
-                        isSelected
-                          ? "border-blue-500 bg-blue-50 text-blue-700 font-medium"
-                          : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                      )}
-                    >
-                      <span className={cn("inline-block w-2 h-2 rounded-full mr-2",
-                        isSelected ? "bg-blue-500" : option.color.split(' ')[0]
-                      )} />
-                      {option.label}
-                    </button>
-                  );
-                })}
-              </div>
+              <FormField label="Status">
+                <Select
+                  value={localFilters.status?.[0] || ''}
+                  onValueChange={(value) => updateFilter('status', value ? [value as PaymentStatus] : undefined)}
+                  placeholder="Select status"
+                >
+                  <SelectContent>
+                    {STATUS_OPTIONS.map(option => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormField>
             </div>
 
             {/* Category Filter */}
             <div className="space-y-3">
-              <h3 className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                <Tag className="w-4 h-4" />
-                Category
-              </h3>
-              <div className="space-y-2">
-                {CATEGORY_OPTIONS.map(option => {
-                  const isSelected = localFilters.category?.includes(option.value);
-                  const checkboxId = `category-${option.value}`;
-                  return (
-                    <label
-                      key={option.value}
-                      htmlFor={checkboxId}
-                      className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 cursor-pointer"
-                    >
-                      <Checkbox
-                        id={checkboxId}
-                        checked={isSelected}
-                        onChange={() => toggleArrayFilter('category', option.value, localFilters.category)}
-                      />
-                      <div className="flex items-center gap-2 flex-1">
-                        {option.icon}
-                        <span className="text-sm">{option.label}</span>
-                      </div>
-                    </label>
-                  );
-                })}
-              </div>
+              <FormField label="Category">
+                <Select
+                  value={localFilters.category?.[0] || ''}
+                  onValueChange={(value) => updateFilter('category', value ? [value as PaymentCategory] : undefined)}
+                  placeholder="Select category"
+                >
+                  <SelectContent>
+                    {CATEGORY_OPTIONS.map(option => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormField>
             </div>
 
             {/* Date Range */}
@@ -201,23 +181,23 @@ export default function FilterPanel({
               </h3>
               <div className="space-y-2">
                 <FormField label="From">
-                  <TextInput
-                    type="date"
-                    value={localFilters.dateRange?.start || ''}
-                    onChange={(e) => updateFilter('dateRange', {
-                      start: e.target.value,
+                  <DatePicker
+                    date={localFilters.dateRange?.start || ''}
+                    onDateChange={(date) => updateFilter('dateRange', {
+                      start: date ? date.toISOString().split('T')[0] : '',
                       end: localFilters.dateRange?.end || ''
                     })}
+                    placeholder="Select start date"
                   />
                 </FormField>
                 <FormField label="To">
-                  <TextInput
-                    type="date"
-                    value={localFilters.dateRange?.end || ''}
-                    onChange={(e) => updateFilter('dateRange', {
+                  <DatePicker
+                    date={localFilters.dateRange?.end || ''}
+                    onDateChange={(date) => updateFilter('dateRange', {
                       start: localFilters.dateRange?.start || '',
-                      end: e.target.value
+                      end: date ? date.toISOString().split('T')[0] : ''
                     })}
+                    placeholder="Select end date"
                   />
                 </FormField>
               </div>
@@ -265,60 +245,33 @@ export default function FilterPanel({
 
             {/* Payment Method */}
             <div className="space-y-3">
-              <h3 className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                <CreditCard className="w-4 h-4" />
-                Payment Method
-              </h3>
-              <div className="space-y-2">
-                {METHOD_OPTIONS.map(option => {
-                  const isSelected = localFilters.paymentMethod?.includes(option.value);
-                  const checkboxId = `method-${option.value}`;
-                  return (
-                    <label
-                      key={option.value}
-                      htmlFor={checkboxId}
-                      className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 cursor-pointer"
-                    >
-                      <Checkbox
-                        id={checkboxId}
-                        checked={isSelected}
-                        onChange={() => toggleArrayFilter('paymentMethod', option.value, localFilters.paymentMethod)}
-                      />
-                      <span className="text-sm">{option.label}</span>
-                    </label>
-                  );
-                })}
-              </div>
+              <FormField label="Payment Method">
+                <Select
+                  value={localFilters.paymentMethod?.[0] || ''}
+                  onValueChange={(value) => updateFilter('paymentMethod', value ? [value as PaymentMethod] : undefined)}
+                  placeholder="Select payment method"
+                >
+                  <SelectContent>
+                    {METHOD_OPTIONS.map(option => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </FormField>
             </div>
 
             {/* Priority */}
             <div className="space-y-3">
-              <h3 className="text-sm font-medium text-gray-700 flex items-center gap-2">
-                <Flag className="w-4 h-4" />
-                Priority
-              </h3>
-              <div className="grid grid-cols-2 gap-2">
-                {PRIORITY_OPTIONS.map(option => {
-                  const isSelected = localFilters.priority?.includes(option.value);
-                  return (
-                    <button
-                      key={option.value}
-                      onClick={() => toggleArrayFilter('priority', option.value, localFilters.priority)}
-                      className={cn(
-                        "px-3 py-2 text-sm rounded-lg border transition-all text-left",
-                        isSelected
-                          ? "border-blue-500 bg-blue-50 text-blue-700 font-medium"
-                          : "border-gray-200 hover:border-gray-300 hover:bg-gray-50"
-                      )}
-                    >
-                      <span className={cn("inline-block w-2 h-2 rounded-full mr-2",
-                        isSelected ? "bg-blue-500" : option.color.split(' ')[0]
-                      )} />
-                      {option.label}
-                    </button>
-                  );
-                })}
-              </div>
+              <FormField label="Priority">
+                <MultiSelect
+                  options={PRIORITY_OPTIONS}
+                  value={localFilters.priority || []}
+                  onValueChange={(values) => updateFilter('priority', values.length > 0 ? values as PaymentPriority[] : undefined)}
+                  placeholder="Select priorities"
+                />
+              </FormField>
             </div>
 
             {/* Search */}

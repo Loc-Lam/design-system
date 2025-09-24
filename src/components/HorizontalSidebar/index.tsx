@@ -158,8 +158,8 @@ export function HorizontalSidebar({
           >
             <Bell className="w-5 h-5" />
             {actions.notifications.count && actions.notifications.count > 0 && (
-              <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full flex items-center justify-center">
-                <span className="w-2 h-2 bg-red-500 rounded-full"></span>
+              <span className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full flex items-center justify-center">
+                <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
               </span>
             )}
           </button>

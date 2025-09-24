@@ -3,7 +3,6 @@ import { Plus, FileText, DollarSign, Clock, CheckCircle, List } from 'lucide-rea
 import { Button } from '@/components/common/button';
 import { StatsCard } from '@/components/common/stats-card';
 import { PaymentRequestCard } from '@/components/common/payment-request-card';
-import { PageHeader } from '@/components/common/page-header';
 import PaymentRequestForm from './PaymentRequestForm';
 import PaymentStatusTracker from './PaymentStatusTracker';
 import ApprovalWorkflow from './ApprovalWorkflow';
@@ -323,12 +322,17 @@ export default function PaymentRequestPage({ className }: PaymentRequestPageProp
   // Dashboard View
   if (viewMode === 'dashboard') {
     return (
-      <div className={`space-y-6 ${className}`}>
-        <PageHeader
-          title="Payment Requests"
-          description="Manage and track payment requests"
-          actions={
-            <>
+      <div className={`flex flex-col h-full ${className}`}>
+        {/* Page Header */}
+        <div className="bg-white border-b border-gray-200 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-semibold text-gray-900">Payment Requests</h1>
+              <p className="text-sm text-gray-600 mt-1">
+                Manage and track payment requests
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
               <Button
                 variant="outline"
                 onClick={handleViewList}
@@ -337,68 +341,73 @@ export default function PaymentRequestPage({ className }: PaymentRequestPageProp
                 <List className="w-4 h-4" />
                 View All
               </Button>
-              <Button onClick={handleCreateNew} className="flex items-center gap-2">
+              <Button onClick={handleCreateNew} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white">
                 <Plus className="w-4 h-4" />
                 New Payment Request
               </Button>
-            </>
-          }
-        />
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <StatsCard
-            title="Total Requests"
-            value={mockStats.total}
-            icon={FileText}
-            iconColor="blue"
-          />
-          <StatsCard
-            title="Total Amount"
-            value={formatCurrency(mockStats.totalAmount)}
-            icon={DollarSign}
-            iconColor="blue"
-          />
-          <StatsCard
-            title="Pending Approval"
-            value={mockStats.pendingApprovalCount}
-            icon={Clock}
-            iconColor="blue"
-          />
-          <StatsCard
-            title="Completed"
-            value={mockStats.byStatus.completed}
-            icon={CheckCircle}
-            iconColor="blue"
-          />
-        </div>
-
-        {/* Recent Requests */}
-        <div className="bg-white border border-gray-200 rounded-lg">
-          <div className="p-6 border-b border-gray-200">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-medium text-gray-900">Recent Payment Requests</h2>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleViewList}
-                className="flex items-center gap-2"
-              >
-                <List className="w-4 h-4" />
-                View All
-              </Button>
             </div>
           </div>
-          <div className="divide-y divide-gray-200">
-            {mockRecentRequests.map((request) => (
-              <PaymentRequestCard
-                key={request.id}
-                request={request}
-                onView={handleViewRequest}
-                onEdit={handleEditRequest}
-                showEditButton={true}
+        </div>
+
+        {/* Content Area */}
+        <div className="flex-1 overflow-auto p-6 bg-gray-50">
+          <div className="max-w-6xl mx-auto space-y-6">
+            {/* Stats Cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              <StatsCard
+                title="Total Requests"
+                value={mockStats.total}
+                icon={FileText}
+                iconColor="blue"
               />
-            ))}
+              <StatsCard
+                title="Total Amount"
+                value={formatCurrency(mockStats.totalAmount)}
+                icon={DollarSign}
+                iconColor="blue"
+              />
+              <StatsCard
+                title="Pending Approval"
+                value={mockStats.pendingApprovalCount}
+                icon={Clock}
+                iconColor="blue"
+              />
+              <StatsCard
+                title="Completed"
+                value={mockStats.byStatus.completed}
+                icon={CheckCircle}
+                iconColor="blue"
+              />
+            </div>
+
+            {/* Recent Requests */}
+            <div className="bg-white border border-gray-200 rounded-lg">
+              <div className="p-6 border-b border-gray-200">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-lg font-medium text-gray-900">Recent Payment Requests</h2>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={handleViewList}
+                    className="flex items-center gap-2"
+                  >
+                    <List className="w-4 h-4" />
+                    View All
+                  </Button>
+                </div>
+              </div>
+              <div className="divide-y divide-gray-200">
+                {mockRecentRequests.map((request) => (
+                  <PaymentRequestCard
+                    key={request.id}
+                    request={request}
+                    onView={handleViewRequest}
+                    onEdit={handleEditRequest}
+                    showEditButton={true}
+                  />
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -408,31 +417,41 @@ export default function PaymentRequestPage({ className }: PaymentRequestPageProp
   // List View
   if (viewMode === 'list') {
     return (
-      <div className={`space-y-6 ${className}`}>
-        <PageHeader
-          title="All Payment Requests"
-          description="View and manage all payment requests"
-          actions={
-            <>
+      <div className={`flex flex-col h-full ${className}`}>
+        {/* Page Header */}
+        <div className="bg-white border-b border-gray-200 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-semibold text-gray-900">All Payment Requests</h1>
+              <p className="text-sm text-gray-600 mt-1">
+                View and manage all payment requests
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
               <Button variant="outline" onClick={handleBackToDashboard}>
                 Back to Dashboard
               </Button>
-              <Button onClick={handleCreateNew} className="flex items-center gap-2">
+              <Button onClick={handleCreateNew} className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white">
                 <Plus className="w-4 h-4" />
                 New Request
               </Button>
-            </>
-          }
-        />
+            </div>
+          </div>
+        </div>
 
-        <PaymentHistoryList
-          payments={mockAllRequests}
-          filters={filters}
-          onFiltersChange={setFilters}
-          onPaymentView={handleViewRequest}
-          onPaymentEdit={handleEditRequest}
-          onPaymentDelete={(id) => console.log('Delete payment:', id)}
-        />
+        {/* Content Area */}
+        <div className="flex-1 overflow-auto p-6 bg-gray-50">
+          <div className="max-w-6xl mx-auto">
+            <PaymentHistoryList
+              payments={mockAllRequests}
+              filters={filters}
+              onFiltersChange={setFilters}
+              onPaymentView={handleViewRequest}
+              onPaymentEdit={handleEditRequest}
+              onPaymentDelete={(id) => console.log('Delete payment:', id)}
+            />
+          </div>
+        </div>
       </div>
     );
   }
@@ -440,39 +459,49 @@ export default function PaymentRequestPage({ className }: PaymentRequestPageProp
   // Create/Edit Form View
   if (viewMode === 'create' || viewMode === 'edit') {
     return (
-      <div className={`space-y-6 ${className}`}>
-        <PageHeader
-          title={`${viewMode === 'create' ? 'Create' : 'Edit'} Payment Request`}
-          description={
-            viewMode === 'create'
-              ? 'Submit a new payment request for approval'
-              : 'Update payment request details'
-          }
-          actions={
+      <div className={`flex flex-col h-full ${className}`}>
+        {/* Page Header */}
+        <div className="bg-white border-b border-gray-200 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-semibold text-gray-900">
+                {viewMode === 'create' ? 'Create' : 'Edit'} Payment Request
+              </h1>
+              <p className="text-sm text-gray-600 mt-1">
+                {viewMode === 'create'
+                  ? 'Submit a new payment request for approval'
+                  : 'Update payment request details'}
+              </p>
+            </div>
             <Button variant="outline" onClick={handleBackToDashboard}>
               Back to Dashboard
             </Button>
-          }
-        />
+          </div>
+        </div>
 
-        <PaymentRequestForm
-          initialData={selectedRequest ? {
-            title: selectedRequest.title,
-            description: selectedRequest.description,
-            amount: selectedRequest.amount.toString(),
-            currency: selectedRequest.currency,
-            category: selectedRequest.category,
-            paymentMethod: selectedRequest.paymentMethod,
-            priority: selectedRequest.priority,
-            payeeDetails: selectedRequest.payeeDetails,
-            dueDate: selectedRequest.dueDate?.split('T')[0] || '',
-          } : undefined}
-          onSubmit={handleSubmitForm}
-          onSaveDraft={handleSaveDraft}
-          isLoading={isLoading}
-          isDraftSaving={isDraftSaving}
-          errors={errors}
-        />
+        {/* Content Area */}
+        <div className="flex-1 overflow-auto p-6 bg-gray-50">
+          <div className="max-w-6xl mx-auto">
+            <PaymentRequestForm
+              initialData={selectedRequest ? {
+                title: selectedRequest.title,
+                description: selectedRequest.description,
+                amount: selectedRequest.amount.toString(),
+                currency: selectedRequest.currency,
+                category: selectedRequest.category,
+                paymentMethod: selectedRequest.paymentMethod,
+                priority: selectedRequest.priority,
+                payeeDetails: selectedRequest.payeeDetails,
+                dueDate: selectedRequest.dueDate?.split('T')[0] || '',
+              } : undefined}
+              onSubmit={handleSubmitForm}
+              onSaveDraft={handleSaveDraft}
+              isLoading={isLoading}
+              isDraftSaving={isDraftSaving}
+              errors={errors}
+            />
+          </div>
+        </div>
       </div>
     );
   }
@@ -480,25 +509,36 @@ export default function PaymentRequestPage({ className }: PaymentRequestPageProp
   // View Request Detail
   if (viewMode === 'view' && selectedRequest) {
     return (
-      <div className={`space-y-6 ${className}`}>
-        <PageHeader
-          title="Payment Request Details"
-          description={`Request ID: ${selectedRequest.id}`}
-          actions={
-            <>
+      <div className={`flex flex-col h-full ${className}`}>
+        {/* Page Header */}
+        <div className="bg-white border-b border-gray-200 px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-semibold text-gray-900">Payment Request Details</h1>
+              <p className="text-sm text-gray-600 mt-1">
+                Request ID: {selectedRequest.id}
+              </p>
+            </div>
+            <div className="flex items-center gap-3">
               {selectedRequest.status === 'draft' && (
-                <Button onClick={() => handleEditRequest(selectedRequest)}>
+                <Button
+                  onClick={() => handleEditRequest(selectedRequest)}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
                   Edit Request
                 </Button>
               )}
               <Button variant="outline" onClick={handleBackToDashboard}>
                 Back to Dashboard
               </Button>
-            </>
-          }
-        />
+            </div>
+          </div>
+        </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Content Area */}
+        <div className="flex-1 overflow-auto p-6 bg-gray-50">
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Request Details */}
           <div className="lg:col-span-2 space-y-6">
             <div className="bg-white border border-gray-200 rounded-lg p-6">
@@ -552,18 +592,20 @@ export default function PaymentRequestPage({ className }: PaymentRequestPageProp
             />
           </div>
 
-          {/* Status Tracker */}
-          <div className="space-y-6">
-            <PaymentStatusTracker
-              currentStatus={selectedRequest.status}
-              statusHistory={[
-                { status: 'draft', timestamp: selectedRequest.requestedAt },
-                { status: 'submitted', timestamp: selectedRequest.requestedAt },
-                ...(selectedRequest.status !== 'draft' && selectedRequest.status !== 'submitted'
-                  ? [{ status: selectedRequest.status, timestamp: new Date().toISOString() }]
-                  : []),
-              ]}
-            />
+              {/* Status Tracker */}
+              <div className="space-y-6">
+                <PaymentStatusTracker
+                  currentStatus={selectedRequest.status}
+                  statusHistory={[
+                    { status: 'draft', timestamp: selectedRequest.requestedAt },
+                    { status: 'submitted', timestamp: selectedRequest.requestedAt },
+                    ...(selectedRequest.status !== 'draft' && selectedRequest.status !== 'submitted'
+                      ? [{ status: selectedRequest.status, timestamp: new Date().toISOString() }]
+                      : []),
+                  ]}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>

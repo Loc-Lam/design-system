@@ -195,7 +195,7 @@ export default function PaymentRequestForm({
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* General Error */}
         {errors?.general && (
-          <div className="p-4 bg-red-50 border border-red-200 rounded-lg">
+          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <p className="text-sm text-red-600">{errors.general}</p>
           </div>
         )}

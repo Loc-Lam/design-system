@@ -5,58 +5,52 @@ import type { PaymentStatus } from '@/types/payment-request';
 // Following component hierarchy: Design Tokens → Base Components
 // Blue color system compliance: Using blue variants instead of mixed colors
 
+export type ExpenseStatus = 'pending' | 'submitted' | 'approved' | 'rejected' | 'reimbursed';
+export type ReportStatus = 'open' | 'processing' | 'retracted';
+export type StatusBadgeStatus = PaymentStatus | ExpenseStatus | ReportStatus;
+
 interface StatusBadgeProps {
-  status: PaymentStatus;
+  status: StatusBadgeStatus;
+  color?: 'blue' | 'blue-light' | 'gray';
   className?: string;
 }
 
-const statusConfig: Record<PaymentStatus, { label: string; className: string }> = {
-  draft: {
-    label: 'Draft',
-    className: 'bg-gray-100 text-gray-700',
-  },
-  submitted: {
-    label: 'Submitted',
-    className: 'bg-blue-100 text-blue-700',
-  },
-  pending_approval: {
-    label: 'Pending Approval',
-    className: 'bg-blue-50 text-blue-600',
-  },
-  approved: {
-    label: 'Approved',
-    className: 'bg-blue-100 text-blue-700',
-  },
-  rejected: {
-    label: 'Rejected',
-    className: 'bg-red-100 text-red-700',
-  },
-  processing: {
-    label: 'Processing',
-    className: 'bg-blue-100 text-blue-700',
-  },
-  completed: {
-    label: 'Completed',
-    className: 'bg-blue-100 text-blue-700',
-  },
-  cancelled: {
-    label: 'Cancelled',
-    className: 'bg-gray-100 text-gray-700',
-  },
-  on_hold: {
-    label: 'On Hold',
-    className: 'bg-gray-100 text-gray-700',
-  },
+const colorClassMap = {
+  blue: 'bg-blue-100 text-blue-700',
+  'blue-light': 'bg-blue-50 text-blue-600 border border-blue-200',
+  gray: 'bg-gray-100 text-gray-700'
 };
 
-export function StatusBadge({ status, className }: StatusBadgeProps) {
+const statusConfig: Record<StatusBadgeStatus, { label: string; defaultColor: keyof typeof colorClassMap }> = {
+  // Payment statuses
+  draft: { label: 'Draft', defaultColor: 'gray' },
+  submitted: { label: 'Submitted', defaultColor: 'blue' },
+  pending_approval: { label: 'Pending Approval', defaultColor: 'blue-light' },
+  approved: { label: 'Approved', defaultColor: 'blue' },
+  rejected: { label: 'Rejected', defaultColor: 'blue' },
+  processing: { label: 'Processing', defaultColor: 'blue' },
+  completed: { label: 'Completed', defaultColor: 'blue' },
+  cancelled: { label: 'Cancelled', defaultColor: 'gray' },
+  on_hold: { label: 'On Hold', defaultColor: 'gray' },
+  // Expense statuses
+  pending: { label: 'Pending', defaultColor: 'blue-light' },
+  reimbursed: { label: 'Reimbursed', defaultColor: 'blue' },
+  // Report statuses
+  open: { label: 'Open', defaultColor: 'blue-light' },
+  processing: { label: 'Processing', defaultColor: 'blue' },
+  retracted: { label: 'Retracted', defaultColor: 'gray' }
+};
+
+export function StatusBadge({ status, color, className }: StatusBadgeProps) {
   const config = statusConfig[status];
+  const statusColor = color || config.defaultColor;
+  const colorClass = colorClassMap[statusColor];
 
   return (
     <span
       className={cn(
         'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
-        config.className,
+        colorClass,
         className
       )}
     >

@@ -111,15 +111,15 @@ export default function PaymentHistoryList({
   const getStatusColor = (status: PaymentStatus): string => {
     switch (status) {
       case 'completed':
-        return 'bg-green-100 text-green-700';
+        return 'bg-blue-100 text-blue-700';
       case 'pending_approval':
-        return 'bg-yellow-100 text-yellow-700';
+        return 'bg-blue-100 text-blue-700';
       case 'processing':
-        return 'bg-purple-100 text-purple-700';
+        return 'bg-blue-100 text-blue-700';
       case 'approved':
         return 'bg-blue-100 text-blue-700';
       case 'rejected':
-        return 'bg-red-100 text-red-700';
+        return 'bg-blue-100 text-blue-700';
       case 'cancelled':
         return 'bg-gray-100 text-gray-700';
       case 'on_hold':

@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import LoginForm from './components/LoginForm';
 import Profile from './components/Profile';
 import { PaymentRequestPage } from './components/PaymentRequest';
+import { ExpensePage } from './pages/ExpensePage';
+import { ReportsPage } from './pages/ReportsPage';
 import { ExpandableSidebar } from './components/ExpandableSidebar';
 import './App.css';
 
@@ -264,6 +266,16 @@ function App() {
                 label: 'Payment Requests',
                 onClick: () => setCurrentView('payment-requests'),
               },
+              {
+                id: 'expenses',
+                label: 'Expenses',
+                onClick: () => setCurrentView('expenses'),
+              },
+              {
+                id: 'reports',
+                label: 'Reports',
+                onClick: () => setCurrentView('reports'),
+              },
             ]
           : []),
       ],
@@ -301,7 +313,7 @@ function App() {
   const renderContent = () => {
     if (currentView === 'login' && !isAuthenticated) {
       return (
-        <div className="flex justify-center items-center h-screen">
+        <div className="flex justify-center items-center h-screen bg-gray-50">
           <LoginForm
             onSignIn={handleSignIn}
             onForgotPassword={handleForgotPassword}
@@ -323,10 +335,18 @@ function App() {
 
     if (currentView === 'payment-requests' && isAuthenticated) {
       return (
-        <div className="p-6">
+        <div className="p-6 bg-gray-50">
           <PaymentRequestPage />
         </div>
       );
+    }
+
+    if (currentView === 'expenses' && isAuthenticated) {
+      return <ExpensePage />;
+    }
+
+    if (currentView === 'reports' && isAuthenticated) {
+      return <ReportsPage />;
     }
 
     return null;
@@ -345,7 +365,7 @@ function App() {
           }}
         />
       )}
-      <main className="flex-1 overflow-auto">{renderContent()}</main>
+      <main className="flex-1 overflow-auto bg-gray-50">{renderContent()}</main>
     </div>
   );
 }

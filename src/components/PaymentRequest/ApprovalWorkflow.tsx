@@ -70,26 +70,26 @@ export default function ApprovalWorkflow({
   const getStepIcon = (step: ApprovalStep) => {
     switch (step.status) {
       case 'approved':
-        return <Check className="w-4 h-4 text-green-600" />;
+        return <Check className="w-4 h-4 text-blue-600" />;
       case 'rejected':
-        return <X className="w-4 h-4 text-red-600" />;
+        return <X className="w-4 h-4 text-blue-600" />;
       case 'skipped':
         return <div className="w-4 h-4 border border-gray-300 rounded-full bg-gray-100" />;
       default:
-        return <Clock className="w-4 h-4 text-yellow-600" />;
+        return <Clock className="w-4 h-4 text-blue-600" />;
     }
   };
 
   const getStepColor = (step: ApprovalStep) => {
     switch (step.status) {
       case 'approved':
-        return 'border-green-200 bg-green-50';
+        return 'border-blue-200 bg-blue-50';
       case 'rejected':
-        return 'border-red-200 bg-red-50';
+        return 'border-blue-200 bg-blue-50';
       case 'skipped':
         return 'border-gray-200 bg-gray-50';
       default:
-        return 'border-yellow-200 bg-yellow-50';
+        return 'border-blue-200 bg-blue-50';
     }
   };
 
@@ -282,7 +282,7 @@ export default function ApprovalWorkflow({
                               disabled={
                                 processingStep === step.id || !comments[step.id]?.trim()
                               }
-                              className="flex-1 border-red-200 text-red-700 hover:bg-red-50"
+                              className="flex-1 border-blue-200 text-blue-700 hover:bg-blue-50"
                             >
                               {processingStep === step.id ? (
                                 <>

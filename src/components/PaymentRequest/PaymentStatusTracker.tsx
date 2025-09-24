@@ -43,29 +43,29 @@ const STATUS_FLOW: StatusStep[] = [
     status: 'pending_approval',
     label: 'Pending Approval',
     icon: <Clock className="w-4 h-4" />,
-    color: 'text-yellow-600',
-    bgColor: 'bg-yellow-100',
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-100',
   },
   {
     status: 'approved',
     label: 'Approved',
     icon: <Check className="w-4 h-4" />,
-    color: 'text-green-600',
-    bgColor: 'bg-green-100',
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-100',
   },
   {
     status: 'processing',
     label: 'Processing',
     icon: <PlayCircle className="w-4 h-4" />,
-    color: 'text-purple-600',
-    bgColor: 'bg-purple-100',
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-100',
   },
   {
     status: 'completed',
     label: 'Completed',
     icon: <CheckCircle2 className="w-4 h-4" />,
-    color: 'text-green-600',
-    bgColor: 'bg-green-100',
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-100',
   },
 ];
 
@@ -74,8 +74,8 @@ const ERROR_STATUSES: StatusStep[] = [
     status: 'rejected',
     label: 'Rejected',
     icon: <X className="w-4 h-4" />,
-    color: 'text-red-600',
-    bgColor: 'bg-red-100',
+    color: 'text-blue-600',
+    bgColor: 'bg-blue-100',
   },
   {
     status: 'cancelled',
@@ -157,7 +157,7 @@ export default function PaymentStatusTracker({
                   isCurrent
                     ? `${step.bgColor} ${step.color} border-current`
                     : isCompleted
-                    ? 'bg-green-100 text-green-600 border-green-600'
+                    ? 'bg-blue-100 text-blue-600 border-blue-600'
                     : 'bg-gray-50 text-gray-400 border-gray-300'
                 )}
               >
@@ -243,7 +243,7 @@ export default function PaymentStatusTracker({
           <div
             className={cn(
               'h-2 rounded-full transition-all duration-300',
-              isErrorStatus ? 'bg-red-500' : 'bg-blue-500'
+              'bg-blue-500'
             )}
             style={{
               width: `${((getCurrentStepIndex() + 1) / displayFlow.length) * 100}%`,
