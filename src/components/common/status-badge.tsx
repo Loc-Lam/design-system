@@ -37,7 +37,6 @@ const statusConfig: Record<StatusBadgeStatus, { label: string; defaultColor: key
   reimbursed: { label: 'Reimbursed', defaultColor: 'blue' },
   // Report statuses
   open: { label: 'Open', defaultColor: 'blue-light' },
-  processing: { label: 'Processing', defaultColor: 'blue' },
   retracted: { label: 'Retracted', defaultColor: 'gray' }
 };
 
