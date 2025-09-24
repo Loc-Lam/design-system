@@ -191,7 +191,7 @@ export default function PaymentRequestForm({
   const needsBankInfo = formData.paymentMethod === 'bank_transfer' || formData.paymentMethod === 'wire_transfer';
 
   return (
-    <div className={`max-w-4xl mx-auto ${className}`}>
+    <div className={`max-w-4xl mx-auto p-6 ${className}`}>
       <form onSubmit={handleSubmit} className="space-y-8">
         {/* General Error */}
         {errors?.general && (

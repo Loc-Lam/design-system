@@ -185,7 +185,7 @@ export function Sidebar({
               'hover:bg-accent hover:text-accent-foreground',
               'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
               activeItem === item.id
-                ? 'bg-primary text-primary-foreground'
+                ? 'bg-blue-100 text-blue-700 border-blue-500'
                 : 'text-muted-foreground',
               // Desktop collapsed styles
               isCollapsed
@@ -209,14 +209,14 @@ export function Sidebar({
               >
                 <span className="text-left text-base">{item.label}</span>
                 {!!item.badge && (
-                  <span className="bg-destructive text-destructive-foreground text-xs px-2 py-1 rounded-full text-white">
+                  <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">
                     {item.badge}
                   </span>
                 )}
               </div>
             ) : (
               !!item.badge && (
-                <span className="bg-destructive text-destructive-foreground text-xs px-2 py-1 rounded-full text-white absolute top-0 left-[6px]">
+                <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full absolute top-0 left-[6px]">
                   {item.badge}
                 </span>
               )
@@ -234,7 +234,7 @@ export function Sidebar({
                       <button
                         key={child.id}
                         onClick={() => handleItemClick(child)}
-                        className="w-full flex items-center space-x-3 px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+                        className="w-full flex items-center space-x-3 px-4 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:bg-accent hover:text-accent-foreground transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                       >
                         <ChildIconComponent className="w-5 h-5 flex-shrink-0" />
                         <span className="flex-1 text-left">{child.label}</span>

@@ -18,7 +18,9 @@
       "Bash(npx tsc:*)",
       "mcp__figma-dev-mode-mcp-server__get_metadata",
       "Bash(awk:*)",
-      "Bash(tr:*)"
+      "Bash(tr:*)",
+      "Bash(npm install)",
+      "Bash(npm cache clean:*)"
     ],
     "deny": [],
     "ask": []

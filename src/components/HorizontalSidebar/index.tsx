@@ -89,7 +89,7 @@ export function HorizontalSidebar({
     <nav
       data-id={dataId}
       className={cn(
-        'w-full bg-white border-b border-gray-200 px-6 py-3',
+        'w-full bg-card border-b border-border px-6 py-3',
         'flex items-center justify-between',
         'shadow-sm',
         className
@@ -101,7 +101,7 @@ export function HorizontalSidebar({
         <div className="flex items-center">
           <h1
             className={cn(
-              'text-xl font-semibold text-gray-900',
+              'text-xl font-semibold text-foreground',
               logo.className
             )}
           >
@@ -121,11 +121,11 @@ export function HorizontalSidebar({
                 onClick={() => handleItemClick(item)}
                 className={cn(
                   'flex items-center space-x-2 px-3 py-2 text-sm font-medium rounded-lg transition-colors',
-                  'hover:bg-gray-100 hover:text-gray-900',
+                  'hover:bg-accent hover:text-accent-foreground',
                   'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
                   isActive
-                    ? 'text-gray-900 bg-gray-50'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-blue-100 text-blue-700 border-blue-500'
+                    : 'text-muted-foreground hover:text-foreground'
                 )}
                 title={item.label}
               >
@@ -134,7 +134,7 @@ export function HorizontalSidebar({
                 )}
                 <span className="hidden lg:block">{item.label}</span>
                 {item.badge && (
-                  <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
+                  <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">
                     {item.badge}
                   </span>
                 )}
@@ -151,14 +151,14 @@ export function HorizontalSidebar({
           <button
             onClick={actions.notifications.onClick}
             className={cn(
-              'relative p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors',
+              'relative p-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors',
               'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
             )}
             title="Notifications"
           >
             <Bell className="w-5 h-5" />
             {actions.notifications.count && actions.notifications.count > 0 && (
-              <span className="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 w-3 h-3 bg-blue-100 rounded-full flex items-center justify-center border border-blue-500">
                 <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
               </span>
             )}
@@ -170,7 +170,7 @@ export function HorizontalSidebar({
           <button
             onClick={actions.settings.onClick}
             className={cn(
-              'p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors',
+              'p-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors',
               'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
             )}
             title="Settings"
@@ -183,7 +183,7 @@ export function HorizontalSidebar({
         <div className="md:hidden">
           <button
             className={cn(
-              'p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors',
+              'p-2 text-muted-foreground hover:text-foreground hover:bg-accent rounded-lg transition-colors',
               'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2'
             )}
             title="Menu"
@@ -194,7 +194,7 @@ export function HorizontalSidebar({
       </div>
 
       {/* Mobile Navigation - Dropdown */}
-      <div className="md:hidden absolute top-full left-0 right-0 bg-white border-b border-gray-200 shadow-lg hidden">
+      <div className="md:hidden absolute top-full left-0 right-0 bg-card border-b border-border shadow-lg hidden">
         <div className="px-6 py-4 space-y-2">
           {items.map((item) => {
             const IconComponent = item.icon;
@@ -206,11 +206,11 @@ export function HorizontalSidebar({
                 onClick={() => handleItemClick(item)}
                 className={cn(
                   'w-full flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors text-left',
-                  'hover:bg-gray-100 hover:text-gray-900',
+                  'hover:bg-accent hover:text-accent-foreground',
                   'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
                   isActive
-                    ? 'text-gray-900 bg-gray-50'
-                    : 'text-gray-600 hover:text-gray-900'
+                    ? 'bg-blue-100 text-blue-700 border-blue-500'
+                    : 'text-muted-foreground hover:text-foreground'
                 )}
               >
                 {IconComponent && (
@@ -218,7 +218,7 @@ export function HorizontalSidebar({
                 )}
                 <span className="flex-1">{item.label}</span>
                 {item.badge && (
-                  <span className="bg-blue-500 text-white text-xs px-2 py-1 rounded-full">
+                  <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">
                     {item.badge}
                   </span>
                 )}

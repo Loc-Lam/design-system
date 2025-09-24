@@ -16,139 +16,7 @@ import {
 import * as Collapsible from '@radix-ui/react-collapsible';
 import { cn } from '@/lib/utils';
 
-// Color theme type definition
-export type ColorTheme =
-  | 'default'
-  | 'blue'
-  | 'green'
-  | 'orange'
-  | 'purple'
-  | 'red';
-
-// Theme color configurations
-const colorThemes: Record<
-  ColorTheme,
-  {
-    primary: string;
-    primaryForeground: string;
-    secondary: string;
-    secondaryForeground: string;
-    accent: string;
-    accentForeground: string;
-    muted: string;
-    mutedForeground: string;
-    destructive: string;
-    destructiveForeground: string;
-    border: string;
-    card: string;
-    cardForeground: string;
-    background: string;
-    foreground: string;
-  }
-> = {
-  default: {
-    primary: 'bg-slate-900 hover:bg-slate-800',
-    primaryForeground: 'text-white',
-    secondary: 'bg-slate-100 hover:bg-slate-200',
-    secondaryForeground: 'text-slate-900',
-    accent: 'bg-slate-50 hover:bg-slate-100',
-    accentForeground: 'text-slate-900',
-    muted: 'bg-slate-50',
-    mutedForeground: 'text-slate-600',
-    destructive: 'bg-red-500',
-    destructiveForeground: 'text-white',
-    border: 'border-slate-200',
-    card: 'bg-white',
-    cardForeground: 'text-slate-900',
-    background: 'bg-slate-50',
-    foreground: 'text-slate-900',
-  },
-  blue: {
-    primary: 'bg-blue-600 hover:bg-blue-700',
-    primaryForeground: 'text-white',
-    secondary: 'bg-blue-100 hover:bg-blue-200',
-    secondaryForeground: 'text-blue-900',
-    accent: 'bg-blue-50 hover:bg-blue-100',
-    accentForeground: 'text-blue-900',
-    muted: 'bg-blue-50',
-    mutedForeground: 'text-blue-600',
-    destructive: 'bg-red-500',
-    destructiveForeground: 'text-white',
-    border: 'border-blue-200',
-    card: 'bg-white',
-    cardForeground: 'text-blue-900',
-    background: 'bg-blue-50',
-    foreground: 'text-blue-900',
-  },
-  green: {
-    primary: 'bg-blue-600 hover:bg-blue-700',
-    primaryForeground: 'text-white',
-    secondary: 'bg-blue-100 hover:bg-blue-200',
-    secondaryForeground: 'text-blue-900',
-    accent: 'bg-blue-50 hover:bg-blue-100',
-    accentForeground: 'text-blue-900',
-    muted: 'bg-blue-50',
-    mutedForeground: 'text-blue-600',
-    destructive: 'bg-blue-500',
-    destructiveForeground: 'text-white',
-    border: 'border-blue-200',
-    card: 'bg-white',
-    cardForeground: 'text-blue-900',
-    background: 'bg-blue-50',
-    foreground: 'text-blue-900',
-  },
-  orange: {
-    primary: 'bg-orange-600 hover:bg-orange-700',
-    primaryForeground: 'text-white',
-    secondary: 'bg-orange-100 hover:bg-orange-200',
-    secondaryForeground: 'text-orange-900',
-    accent: 'bg-orange-50 hover:bg-orange-100',
-    accentForeground: 'text-orange-900',
-    muted: 'bg-orange-50',
-    mutedForeground: 'text-orange-600',
-    destructive: 'bg-red-500',
-    destructiveForeground: 'text-white',
-    border: 'border-orange-200',
-    card: 'bg-white',
-    cardForeground: 'text-orange-900',
-    background: 'bg-orange-50',
-    foreground: 'text-orange-900',
-  },
-  purple: {
-    primary: 'bg-blue-600 hover:bg-blue-700',
-    primaryForeground: 'text-white',
-    secondary: 'bg-blue-100 hover:bg-blue-200',
-    secondaryForeground: 'text-blue-900',
-    accent: 'bg-blue-50 hover:bg-blue-100',
-    accentForeground: 'text-blue-900',
-    muted: 'bg-blue-50',
-    mutedForeground: 'text-blue-600',
-    destructive: 'bg-blue-500',
-    destructiveForeground: 'text-white',
-    border: 'border-blue-200',
-    card: 'bg-white',
-    cardForeground: 'text-blue-900',
-    background: 'bg-blue-50',
-    foreground: 'text-blue-900',
-  },
-  red: {
-    primary: 'bg-blue-600 hover:bg-blue-700',
-    primaryForeground: 'text-white',
-    secondary: 'bg-blue-100 hover:bg-blue-200',
-    secondaryForeground: 'text-blue-900',
-    accent: 'bg-blue-50 hover:bg-blue-100',
-    accentForeground: 'text-blue-900',
-    muted: 'bg-blue-50',
-    mutedForeground: 'text-blue-600',
-    destructive: 'bg-blue-500',
-    destructiveForeground: 'text-white',
-    border: 'border-blue-200',
-    card: 'bg-white',
-    cardForeground: 'text-blue-900',
-    background: 'bg-blue-50',
-    foreground: 'text-blue-900',
-  },
-};
+// Removed complex theme system - using design system CSS variables and blue color compliance
 
 export interface ExpandableSidebarItem {
   id: string;
@@ -177,7 +45,6 @@ export interface ExpandableSidebarProps {
   'data-id'?: string;
   sections?: ExpandableSidebarSection[];
   items?: ExpandableSidebarItem[];
-  colorTheme?: ColorTheme;
   userInfo?: {
     name: string;
     email: string;
@@ -265,7 +132,6 @@ export function ExpandableSidebar({
   'data-id': dataId,
   sections = defaultSections,
   items = [],
-  colorTheme = 'default',
   defaultCollapsed = false,
   className,
   userInfo,
@@ -291,7 +157,7 @@ export function ExpandableSidebar({
     {}
   );
 
-  const theme = colorThemes[colorTheme];
+  // Using design system CSS variables for consistent styling
 
   const handleItemClick = (item: ExpandableSidebarItem) => {
     setActiveItem(item.id);
@@ -339,12 +205,11 @@ export function ExpandableSidebar({
           }}
           className={cn(
             'w-full relative flex items-center space-x-3 py-3 rounded-lg text-sm font-medium transition-colors',
-            theme.accent,
-            theme.accentForeground,
-            'focus:outline-none focus:ring-2 focus:ring-offset-2',
+            'hover:bg-accent hover:text-accent-foreground',
+            'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
             isActive
-              ? `${theme.primary} ${theme.primaryForeground}`
-              : theme.mutedForeground,
+              ? 'bg-blue-100 text-blue-700 border-blue-500'
+              : 'text-muted-foreground',
             isCollapsed
               ? 'md:justify-center md:px-1'
               : 'md:justify-start md:px-3',
@@ -366,9 +231,7 @@ export function ExpandableSidebar({
               <span className="text-left">{item.label}</span>
               <div className="flex items-center space-x-2">
                 {!!item.badge && (
-                  <span
-                    className={`${theme.destructive} ${theme.destructiveForeground} text-xs px-2 py-1 rounded-full`}
-                  >
+                  <span className="bg-blue-100 text-blue-700 text-xs px-2 py-1 rounded-full">
                     {item.badge}
                   </span>
                 )}
@@ -382,9 +245,7 @@ export function ExpandableSidebar({
             </div>
           )}
           {isCollapsed && !!item.badge && (
-            <span
-              className={`${theme.destructive} ${theme.destructiveForeground} text-xs px-1 py-0.5 rounded-full absolute -top-1 -right-1`}
-            >
+            <span className="bg-blue-100 text-blue-700 text-xs px-1 py-0.5 rounded-full absolute -top-1 -right-1">
               {item.badge}
             </span>
           )}
@@ -409,12 +270,8 @@ export function ExpandableSidebar({
         <button
           onClick={toggleMobileMenu}
           className={cn(
-            'p-3 rounded-lg border shadow-lg transition-colors',
-            theme.card,
-            theme.cardForeground,
-            theme.border,
-            theme.accent,
-            theme.accentForeground
+            'p-3 rounded-lg bg-card border border-border shadow-lg transition-colors',
+            'hover:bg-accent hover:text-accent-foreground'
           )}
           aria-label="Toggle menu"
         >
@@ -438,10 +295,7 @@ export function ExpandableSidebar({
       <div
         data-id={dataId}
         className={cn(
-          'flex flex-col h-screen border-r transition-all duration-300 ease-in-out',
-          theme.card,
-          theme.cardForeground,
-          theme.border,
+          'flex flex-col h-screen bg-card text-card-foreground border-r border-border transition-all duration-300 ease-in-out',
           isCollapsed ? 'md:w-16' : 'md:w-64',
           'md:relative fixed top-0 left-0 z-50',
           'md:translate-x-0',
@@ -454,28 +308,17 @@ export function ExpandableSidebar({
         {/* Header */}
         <div
           className={cn(
-            'flex items-center justify-between p-4 border-b',
-            theme.border
+            'flex items-center justify-between p-4 border-b border-border'
           )}
         >
           {(!isCollapsed || isMobileMenuOpen) && (
             <div className="flex items-center space-x-2">
-              <div
-                className={cn(
-                  'w-8 h-8 rounded-lg flex items-center justify-center',
-                  theme.primary
-                )}
-              >
-                <span
-                  className={cn(
-                    'font-semibold text-sm',
-                    theme.primaryForeground
-                  )}
-                >
+              <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                <span className="text-primary-foreground font-semibold text-sm">
                   {title.charAt(0).toUpperCase()}
                 </span>
               </div>
-              <h2 className={cn('text-lg font-semibold', theme.foreground)}>
+              <h2 className="text-lg font-semibold text-foreground">
                 {title}
               </h2>
             </div>
@@ -484,9 +327,7 @@ export function ExpandableSidebar({
           <button
             onClick={toggleCollapsed}
             className={cn(
-              'hidden md:block p-2 rounded-lg transition-colors',
-              theme.accent,
-              theme.accentForeground
+              'hidden md:block p-2 rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors'
             )}
             aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
@@ -500,9 +341,7 @@ export function ExpandableSidebar({
           <button
             onClick={() => setIsMobileMenuOpen(false)}
             className={cn(
-              'md:hidden p-2 rounded-lg transition-colors',
-              theme.accent,
-              theme.accentForeground
+              'md:hidden p-2 rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors'
             )}
             aria-label="Close menu"
           >
@@ -527,9 +366,8 @@ export function ExpandableSidebar({
                   onClick={() => toggleSectionExpanded(section.id)}
                   className={cn(
                     'w-full flex items-center justify-between py-2 px-2 rounded-lg text-sm font-semibold transition-colors',
-                    theme.secondary,
-                    theme.secondaryForeground,
-                    'focus:outline-none focus:ring-2 focus:ring-offset-2',
+                    'bg-blue-50 text-blue-700 hover:bg-blue-100',
+                    'focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
                     !isCollapsed || isMobileMenuOpen
                       ? 'flex'
                       : 'hidden md:hidden'
@@ -559,30 +397,18 @@ export function ExpandableSidebar({
 
         {/* Footer */}
         {(!isCollapsed || isMobileMenuOpen) && !!userInfo && (
-          <div className={cn('p-4 border-t', theme.border)}>
+          <div className={cn('p-4 border-t border-border')}>
             <div className="flex items-center space-x-3">
-              <div
-                className={cn(
-                  'w-10 h-10 rounded-full flex items-center justify-center',
-                  theme.muted
-                )}
-              >
-                <span
-                  className={cn('text-base font-medium', theme.mutedForeground)}
-                >
+              <div className="w-10 h-10 bg-muted rounded-full flex items-center justify-center">
+                <span className="text-muted-foreground text-base font-medium">
                   {userInfo.initial}
                 </span>
               </div>
               <div className="flex-1 min-w-0">
-                <p
-                  className={cn(
-                    'text-base font-medium truncate',
-                    theme.foreground
-                  )}
-                >
+                <p className="text-base font-medium text-foreground truncate">
                   {userInfo.name}
                 </p>
-                <p className={cn('text-sm truncate', theme.mutedForeground)}>
+                <p className="text-sm text-muted-foreground truncate">
                   {userInfo.email}
                 </p>
               </div>

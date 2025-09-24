@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import LoginForm from './components/LoginForm';
 import Profile from './components/Profile';
-import { PaymentRequestPage } from './components/PaymentRequest';
+import PaymentRequestPage from './components/PaymentRequest/PaymentRequestPage';
 import { ExpensePage } from './pages/ExpensePage';
 import { ReportsPage } from './pages/ReportsPage';
 import { ExpandableSidebar } from './components/ExpandableSidebar';
@@ -334,11 +334,7 @@ function App() {
     }
 
     if (currentView === 'payment-requests' && isAuthenticated) {
-      return (
-        <div className="p-6 bg-gray-50">
-          <PaymentRequestPage />
-        </div>
-      );
+      return <PaymentRequestPage />;
     }
 
     if (currentView === 'expenses' && isAuthenticated) {

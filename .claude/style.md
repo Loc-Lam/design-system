@@ -366,6 +366,8 @@ Remember: **ALWAYS ASK rather than assume when requirements are ambiguous!**
    - [ ] Verify that type imports match the actual interface definitions
    - [ ] Ensure all dependencies are properly imported (icons, components, types)
 
+**CRITICAL: Do NOT restart the development server after implementation - it should continue running from initial startup.**
+
 2. **Validate Color Consistency**:
    - [ ] Primary interactive elements use `blue-500` (buttons, links, main UI)
    - [ ] Hover states use `blue-600`
