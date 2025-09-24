@@ -146,7 +146,8 @@ When invoked, you must follow these steps:
 
 2. **Status Indicators (Blue-based system):**
    - Success/Completed: `bg-blue-100 text-blue-700` (NOT green)
-   - Active/Current: `bg-blue-50 text-blue-600 border-blue-200`
+   - Pending Approval: `bg-blue-50 text-blue-600 border-blue-200` (distinct light blue)
+   - Active/Current: `bg-blue-100 text-blue-700 border-blue-300`
    - Selected: `bg-blue-100 text-blue-700 border-blue-500`
    - Info/Default: `bg-blue-50 text-blue-600`
 
@@ -155,6 +156,34 @@ When invoked, you must follow these steps:
    - Input borders: `border-gray-300 focus:border-blue-500`
    - Field labels: `text-gray-700` (neutral, not blue)
    - Required indicators: `text-blue-600` (NOT red)
+   - Select components: Use shadcn/ui Select with blue focus/active states
+   - Checkbox groups: Use for multi-select options (payment methods)
+
+**SHADCN/UI SELECT COMPONENT STANDARDS:**
+- **Import Pattern**: `import { Select, SelectContent, SelectItem } from '@/components/ui/select'`
+- **Usage Pattern**: Always wrap items in `<SelectContent>` and use `<SelectItem>` for options
+- **Event Handling**: Use `onValueChange` prop, NOT `onChange`
+- **Styling**: Blue focus states (`focus:ring-blue-500`) and hover states built-in
+- **Accessibility**: Keyboard navigation and screen reader support included
+
+**SHADCN/UI DATEPICKER COMPONENT STANDARDS:**
+- **Import Pattern**: `import { DatePicker } from '@/components/ui/date-picker'`
+- **Usage Pattern**: Single component with built-in calendar popup
+- **Event Handling**: Use `onDateChange` prop for date selection
+- **Date Format**: Handles Date objects, converts to/from strings as needed
+- **Styling**: Blue focus states and calendar styling with blue accents
+- **Accessibility**: Full keyboard navigation and screen reader support
+- **Validation**: Built-in date validation and format handling
+
+**SHADCN/UI MULTISELECT COMPONENT STANDARDS:**
+- **Import Pattern**: `import { MultiSelect } from '@/components/ui/multi-select'`
+- **Usage Pattern**: Dropdown with checkboxes and tag display for selected items
+- **Event Handling**: Use `onValueChange` prop that receives array of selected values
+- **Options Format**: Array of objects with `value`, `label`, and optional `color`/`icon`
+- **Display Logic**: Shows selected tags, collapses to count when many items selected
+- **Styling**: Blue focus states, selected tags in blue theme
+- **Accessibility**: Full keyboard navigation and screen reader support
+- **Interaction**: Click to remove individual tags, supports bulk selection
 
 4. **Navigation & Layout:**
    - Active nav items: `bg-blue-100 text-blue-700`

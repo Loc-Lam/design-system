@@ -45,48 +45,48 @@ const colorThemes = {
     dangerText: 'text-red-600',
   },
   green: {
-    background: 'bg-green-50',
+    background: 'bg-blue-50',
     text: 'text-green-900',
     mutedText: 'text-green-700',
     labelText: 'text-green-600',
     border: 'border-green-200',
     cardBg: 'bg-white',
-    button: 'bg-green-600 hover:bg-green-700 text-white',
-    secondaryButton: 'bg-green-100 hover:bg-green-200 text-green-900',
+    button: 'bg-blue-600 hover:bg-blue-700 text-white',
+    secondaryButton: 'bg-blue-100 hover:bg-blue-200 text-blue-900',
     dropdownBg: 'bg-white',
-    dropdownHover: 'hover:bg-green-50',
+    dropdownHover: 'hover:bg-blue-50',
     dropdownBorder: 'border-green-200',
-    skillBg: 'bg-green-100 text-green-800',
+    skillBg: 'bg-blue-100 text-blue-800',
     dangerText: 'text-red-600',
   },
   purple: {
-    background: 'bg-purple-50',
+    background: 'bg-blue-50',
     text: 'text-purple-900',
     mutedText: 'text-purple-700',
     labelText: 'text-purple-600',
     border: 'border-purple-200',
     cardBg: 'bg-white',
-    button: 'bg-purple-600 hover:bg-purple-700 text-white',
-    secondaryButton: 'bg-purple-100 hover:bg-purple-200 text-purple-900',
+    button: 'bg-blue-600 hover:bg-blue-700 text-white',
+    secondaryButton: 'bg-blue-100 hover:bg-blue-200 text-blue-900',
     dropdownBg: 'bg-white',
-    dropdownHover: 'hover:bg-purple-50',
+    dropdownHover: 'hover:bg-blue-50',
     dropdownBorder: 'border-purple-200',
-    skillBg: 'bg-purple-100 text-purple-800',
+    skillBg: 'bg-blue-100 text-blue-800',
     dangerText: 'text-red-600',
   },
   red: {
-    background: 'bg-red-50',
+    background: 'bg-blue-50',
     text: 'text-red-900',
     mutedText: 'text-red-700',
     labelText: 'text-red-600',
     border: 'border-red-200',
     cardBg: 'bg-white',
-    button: 'bg-red-600 hover:bg-red-700 text-white',
-    secondaryButton: 'bg-red-100 hover:bg-red-200 text-red-900',
+    button: 'bg-blue-600 hover:bg-blue-700 text-white',
+    secondaryButton: 'bg-blue-100 hover:bg-blue-200 text-blue-900',
     dropdownBg: 'bg-white',
-    dropdownHover: 'hover:bg-red-50',
+    dropdownHover: 'hover:bg-blue-50',
     dropdownBorder: 'border-red-200',
-    skillBg: 'bg-red-100 text-red-800',
+    skillBg: 'bg-blue-100 text-blue-800',
     dangerText: 'text-red-700',
   },
   orange: {
@@ -319,21 +319,27 @@ const Profile = ({
   return (
     <div
       data-id={dataId}
-      className={`max-w-4xl mx-auto p-6 ${theme.background}`}
+      className="flex flex-col h-full"
     >
-      {/* Header Section */}
-      <div className="flex items-center justify-between pb-6">
-        <div className="flex items-center gap-4">
-          <img
-            src={userProfile.avatar}
-            alt="Profile"
-            className="w-16 h-16 rounded-full object-cover"
-          />
-          <h1 className={`text-2xl font-semibold ${theme.text}`}>
-            {userProfile.fullName}
-          </h1>
-        </div>
-        <div className="relative flex gap-4 ">
+      {/* Page Header */}
+      <div className="bg-white border-b border-gray-200 px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <img
+              src={userProfile.avatar}
+              alt="Profile"
+              className="w-12 h-12 rounded-full object-cover"
+            />
+            <div>
+              <h1 className="text-2xl font-semibold text-gray-900">
+                {userProfile.fullName}
+              </h1>
+              <p className="text-sm text-gray-600 mt-1">
+                {userProfile.email}
+              </p>
+            </div>
+          </div>
+          <div className="relative flex gap-4">
           {/* <button
             onClick={handleEditProfile}
             className={`flex items-center gap-2 px-4 py-2 ${theme.button} rounded-lg transition-colors cursor-pointer`}
@@ -341,18 +347,14 @@ const Profile = ({
             <Edit className="w-4 h-4" />
             Edit profile
           </button> */}
-          <button
-            onClick={() => setDropdownOpen(!dropdownOpen)}
-            className={cn(
-              `flex items-center gap-2 px-4 py-2 ${theme.secondaryButton} rounded-lg transition-colors cursor-pointer`
-            )}
-          >
-            <ChevronDown className="w-4 h-4" />
-          </button>
-          {dropdownOpen && (
-            <div
-              className={`absolute right-0 top-full mt-2 w-48 ${theme.dropdownBg} border ${theme.dropdownBorder} rounded-lg shadow-lg z-10`}
+            <button
+              onClick={() => setDropdownOpen(!dropdownOpen)}
+              className="flex items-center gap-2 px-4 py-2 bg-blue-100 hover:bg-blue-200 text-blue-900 rounded-lg transition-colors cursor-pointer"
             >
+              <ChevronDown className="w-4 h-4" />
+            </button>
+            {dropdownOpen && (
+              <div className="absolute right-0 top-full mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-10">
               {dropdownItems.map((item, index) => (
                 <button
                   key={index}
@@ -360,7 +362,7 @@ const Profile = ({
                     if (item.action) item.action();
                     setDropdownOpen(false);
                   }}
-                  className={`w-full flex items-center gap-3 px-4 py-3 text-left ${theme.dropdownHover} transition-colors first:rounded-t-lg last:rounded-b-lg ${item.danger ? theme.dangerText : theme.mutedText}`}
+                  className={`w-full flex items-center gap-3 px-4 py-3 text-left hover:bg-blue-50 transition-colors first:rounded-t-lg last:rounded-b-lg ${item.danger ? 'text-red-600' : 'text-gray-700'}`}
                 >
                   <item.icon className="w-4 h-4" />
                   {item.label}
@@ -368,15 +370,20 @@ const Profile = ({
               ))}
             </div>
           )}
+          </div>
         </div>
       </div>
-      {/* Personal Information Section */}
-      <div
-        className={cn(
-          'flex flex-col gap-6 align-top items-start',
-          layout === 'double' ? 'md:flex-row' : ''
-        )}
-      >
+
+      {/* Content Area */}
+      <div className="flex-1 overflow-auto p-6 bg-gray-50">
+        <div className="max-w-6xl mx-auto">
+          {/* Personal Information Section */}
+          <div
+            className={cn(
+              'flex flex-col gap-6 align-top items-start',
+              layout === 'double' ? 'md:flex-row' : ''
+            )}
+          >
         <div
           className={cn(
             'flex flex-col gap-6 w-full flex-1',
@@ -396,14 +403,14 @@ const Profile = ({
                   <>
                     <button
                       onClick={() => handleCancel('personal')}
-                      className={`px-3 py-1 text-sm border ${theme.border} ${theme.secondaryButton} rounded-lg transition-colors`}
+                      className="px-3 py-1 text-sm border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-colors"
                       disabled={saving.personal}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={() => handleSave('personal')}
-                      className={`px-3 py-1 text-sm ${theme.button} rounded-lg transition-colors disabled:opacity-50`}
+                      className="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50"
                       disabled={saving.personal}
                     >
                       {saving.personal ? 'Saving...' : 'Save Changes'}
@@ -412,7 +419,7 @@ const Profile = ({
                 ) : (
                   <button
                     onClick={() => handleEditToggle('personal')}
-                    className={`px-3 py-1 text-sm ${theme.button} rounded-lg transition-colors`}
+                    className="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
                     disabled={isLoading}
                   >
                     Edit
@@ -422,7 +429,7 @@ const Profile = ({
             </div>
 
             {errors.personal?.general && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+              <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                 <p className="text-sm text-red-600">
                   {errors.personal.general}
                 </p>
@@ -647,14 +654,14 @@ const Profile = ({
                   <>
                     <button
                       onClick={() => handleCancel('address')}
-                      className={`px-3 py-1 text-sm border ${theme.border} ${theme.secondaryButton} rounded-lg transition-colors`}
+                      className="px-3 py-1 text-sm border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-colors"
                       disabled={saving.address}
                     >
                       Cancel
                     </button>
                     <button
                       onClick={() => handleSave('address')}
-                      className={`px-3 py-1 text-sm ${theme.button} rounded-lg transition-colors disabled:opacity-50`}
+                      className="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50"
                       disabled={saving.address}
                     >
                       {saving.address ? 'Saving...' : 'Save Changes'}
@@ -663,7 +670,7 @@ const Profile = ({
                 ) : (
                   <button
                     onClick={() => handleEditToggle('address')}
-                    className={`px-3 py-1 text-sm ${theme.button} rounded-lg transition-colors`}
+                    className="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
                     disabled={isLoading}
                   >
                     Edit
@@ -673,7 +680,7 @@ const Profile = ({
             </div>
 
             {errors.address?.general && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+              <div className="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                 <p className="text-sm text-red-600">{errors.address.general}</p>
               </div>
             )}
@@ -945,14 +952,14 @@ const Profile = ({
                 <>
                   <button
                     onClick={() => handleCancel('payment')}
-                    className={`px-3 py-1 text-sm border ${theme.border} ${theme.secondaryButton} rounded-lg transition-colors`}
+                    className="px-3 py-1 text-sm border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 rounded-lg transition-colors"
                     disabled={saving.payment}
                   >
                     Cancel
                   </button>
                   <button
                     onClick={() => handleSave('payment')}
-                    className={`px-3 py-1 text-sm ${theme.button} rounded-lg transition-colors disabled:opacity-50`}
+                    className="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors disabled:opacity-50"
                     disabled={saving.payment}
                   >
                     {saving.payment ? 'Saving...' : 'Save Changes'}
@@ -961,7 +968,7 @@ const Profile = ({
               ) : (
                 <button
                   onClick={() => handleEditToggle('payment')}
-                  className={`px-3 py-1 text-sm ${theme.button} rounded-lg transition-colors`}
+                  className="px-3 py-1 text-sm bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
                   disabled={isLoading}
                 >
                   Edit
@@ -1189,7 +1196,10 @@ const Profile = ({
             </div>
           </div>
         </div>
+          </div>
+        </div>
       </div>
+
       {/* Click outside to close dropdown */}
       {dropdownOpen && (
         <div

@@ -38,7 +38,7 @@ const colorThemes = {
     success: 'text-green-600',
   },
   green: {
-    background: 'bg-green-50',
+    background: 'bg-blue-50',
     text: 'text-green-900',
     mutedText: 'text-green-600',
     accent: 'text-green-500',
@@ -46,15 +46,15 @@ const colorThemes = {
     inputFocus: 'focus:ring-green-500 focus:border-green-500 focus:ring-2',
     inputError: 'border-red-500 focus:ring-red-500 focus:border-red-500',
     button:
-      'bg-green-600 hover:bg-green-700 text-white disabled:bg-green-400 disabled:cursor-not-allowed',
+      'bg-blue-600 hover:bg-blue-700 text-white disabled:bg-blue-400 disabled:cursor-not-allowed',
     buttonFocus: 'focus:ring-green-600 focus:ring-2 focus:ring-offset-2',
-    buttonLoading: 'bg-green-500 cursor-not-allowed',
+    buttonLoading: 'bg-blue-500 cursor-not-allowed',
     link: 'text-green-900 hover:text-green-600',
     error: 'text-red-600',
     success: 'text-green-700',
   },
   purple: {
-    background: 'bg-purple-50',
+    background: 'bg-blue-50',
     text: 'text-purple-900',
     mutedText: 'text-purple-600',
     accent: 'text-purple-500',
@@ -62,15 +62,15 @@ const colorThemes = {
     inputFocus: 'focus:ring-purple-500 focus:border-purple-500 focus:ring-2',
     inputError: 'border-red-500 focus:ring-red-500 focus:border-red-500',
     button:
-      'bg-purple-600 hover:bg-purple-700 text-white disabled:bg-purple-400 disabled:cursor-not-allowed',
+      'bg-blue-600 hover:bg-blue-700 text-white disabled:bg-blue-400 disabled:cursor-not-allowed',
     buttonFocus: 'focus:ring-purple-600 focus:ring-2 focus:ring-offset-2',
-    buttonLoading: 'bg-purple-500 cursor-not-allowed',
+    buttonLoading: 'bg-blue-500 cursor-not-allowed',
     link: 'text-purple-900 hover:text-purple-600',
     error: 'text-red-600',
     success: 'text-green-600',
   },
   red: {
-    background: 'bg-red-50',
+    background: 'bg-blue-50',
     text: 'text-red-900',
     mutedText: 'text-red-600',
     accent: 'text-red-500',
@@ -78,9 +78,9 @@ const colorThemes = {
     inputFocus: 'focus:ring-red-500 focus:border-red-500 focus:ring-2',
     inputError: 'border-red-600 focus:ring-red-600 focus:border-red-600',
     button:
-      'bg-red-600 hover:bg-red-700 text-white disabled:bg-red-400 disabled:cursor-not-allowed',
+      'bg-blue-600 hover:bg-blue-700 text-white disabled:bg-blue-400 disabled:cursor-not-allowed',
     buttonFocus: 'focus:ring-red-600 focus:ring-2 focus:ring-offset-2',
-    buttonLoading: 'bg-red-500 cursor-not-allowed',
+    buttonLoading: 'bg-blue-500 cursor-not-allowed',
     link: 'text-red-900 hover:text-red-600',
     error: 'text-red-700',
     success: 'text-green-600',
@@ -170,7 +170,7 @@ const LoginForm = ({
       {/* Success Message */}
       {success && (
         <div
-          className={`mb-4 p-3 rounded-lg bg-green-50 border border-green-200`}
+          className={`mb-4 p-3 rounded-lg bg-blue-50 border border-blue-200`}
           role="alert"
         >
           <p className={`text-sm ${theme.success}`}>{success}</p>
@@ -180,7 +180,7 @@ const LoginForm = ({
       {/* General Error Message */}
       {errors?.general && (
         <div
-          className={`mb-4 p-3 rounded-lg bg-red-50 border border-red-200`}
+          className={`mb-4 p-3 rounded-lg bg-blue-50 border border-blue-200`}
           role="alert"
         >
           <p className={`text-sm ${theme.error}`}>{errors.general}</p>
