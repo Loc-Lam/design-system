@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import LoginForm from './components/LoginForm';
 import Profile from './components/Profile';
-import PaymentRequestPage from './components/PaymentRequest/PaymentRequestPage';
-import { ExpensePage } from './pages/ExpensePage';
 import { ReportsPage } from './pages/ReportsPage';
 import { ExpandableSidebar } from './components/ExpandableSidebar';
 import './App.css';
@@ -262,16 +260,6 @@ function App() {
                 onClick: () => setCurrentView('profile'),
               },
               {
-                id: 'payment-requests',
-                label: 'Payment Requests',
-                onClick: () => setCurrentView('payment-requests'),
-              },
-              {
-                id: 'expenses',
-                label: 'Expenses',
-                onClick: () => setCurrentView('expenses'),
-              },
-              {
                 id: 'reports',
                 label: 'Reports',
                 onClick: () => setCurrentView('reports'),
@@ -333,18 +321,9 @@ function App() {
       );
     }
 
-    if (currentView === 'payment-requests' && isAuthenticated) {
-      return <PaymentRequestPage />;
-    }
-
-    if (currentView === 'expenses' && isAuthenticated) {
-      return <ExpensePage />;
-    }
-
     if (currentView === 'reports' && isAuthenticated) {
       return <ReportsPage />;
     }
-
 
     return null;
   };

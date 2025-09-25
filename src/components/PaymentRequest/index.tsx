@@ -1,7 +1,6 @@
 // Payment Request Module Exports
 // Following component hierarchy: Design Tokens → Base → Layout → Composite → Feature → Page
 
-export { default as PaymentRequestPage } from './PaymentRequestPage';
 export { default as PaymentRequestForm } from './PaymentRequestForm';
 export { PaymentRequestModal } from './PaymentRequestModal';
 export { default as PaymentStatusTracker } from './PaymentStatusTracker';
