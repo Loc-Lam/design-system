@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ExpenseDashboard } from '@/components/Expenses';
 import type { ExpenseData } from '@/components/Expenses';
 import type { ExpenseFormData } from '@/components/Expenses/ExpenseHeader';
+import { MOCK_RECEIPTS } from '@/types/mock-receipts';
 
 // Page Components Level: Full page compositions
 // Following component hierarchy: Base → Layout → Composite → Feature → Page
@@ -10,20 +11,20 @@ interface ExpensePageProps {
   className?: string;
 }
 
-// Comprehensive mock data matching the Figma design structure
+// Comprehensive mock data matching the Figma design structure with real receipt images
 const mockExpensesData: ExpenseData[] = [
   {
     id: 'exp_001',
-    date: '2024-05-18',
-    merchant: 'JDMobbin',
-    amount: 250.00,
+    date: '2024-03-15',
+    merchant: 'Starbucks Coffee',
+    amount: 10.30,
     workspace: "janasmith.mobbin@gmail.com's Expensify",
-    category: 'Advertising',
-    tag: 'ICU',
-    description: 'Travel Expense',
+    category: 'Meals & Entertainment',
+    tag: 'CLIENT',
+    description: 'Client Meeting Coffee',
     status: 'Processing',
     receipt: {
-      url: '/mock-receipt-jdmobbin.jpg',
+      url: MOCK_RECEIPTS[0].url,
       type: 'image'
     },
     submittedBy: {
@@ -33,16 +34,16 @@ const mockExpensesData: ExpenseData[] = [
   },
   {
     id: 'exp_002',
-    date: '2024-05-17',
-    merchant: 'Uber Technologies',
-    amount: 45.75,
+    date: '2024-03-16',
+    merchant: 'Whole Foods Market',
+    amount: 19.78,
     workspace: "janasmith.mobbin@gmail.com's Expensify",
-    category: 'Transportation',
-    tag: 'TRAVEL',
-    description: 'Airport Transport',
+    category: 'Office Supplies',
+    tag: 'OFFICE',
+    description: 'Office Snacks & Supplies',
     status: 'Approved',
     receipt: {
-      url: '/mock-receipt-uber.jpg',
+      url: MOCK_RECEIPTS[1].url,
       type: 'image'
     },
     submittedBy: {
@@ -52,16 +53,16 @@ const mockExpensesData: ExpenseData[] = [
   },
   {
     id: 'exp_003',
-    date: '2024-05-16',
-    merchant: 'Starbucks Coffee',
-    amount: 12.50,
+    date: '2024-03-17',
+    merchant: 'Shell Gas Station',
+    amount: 57.42,
     workspace: "janasmith.mobbin@gmail.com's Expensify",
-    category: 'Meals & Entertainment',
-    tag: 'CLIENT',
-    description: 'Client Meeting Coffee',
+    category: 'Travel & Transportation',
+    tag: 'TRAVEL',
+    description: 'Business Trip Fuel',
     status: 'Pending',
     receipt: {
-      url: '/mock-receipt-starbucks.jpg',
+      url: MOCK_RECEIPTS[2].url,
       type: 'image'
     },
     submittedBy: {
@@ -71,54 +72,16 @@ const mockExpensesData: ExpenseData[] = [
   },
   {
     id: 'exp_004',
-    date: '2024-05-15',
-    merchant: 'Adobe Creative Cloud',
-    amount: 79.99,
+    date: '2024-03-18',
+    merchant: 'Best Buy',
+    amount: 68.11,
     workspace: "janasmith.mobbin@gmail.com's Expensify",
-    category: 'Software & Services',
-    tag: 'TOOLS',
-    description: 'Monthly Subscription',
+    category: 'Equipment & Software',
+    tag: 'TECH',
+    description: 'Office Equipment Purchase',
     status: 'Processing',
     receipt: {
-      url: '/mock-receipt-adobe.pdf',
-      type: 'pdf'
-    },
-    submittedBy: {
-      name: 'Jana Smith',
-      initial: 'J'
-    }
-  },
-  {
-    id: 'exp_005',
-    date: '2024-05-14',
-    merchant: 'Amazon Web Services',
-    amount: 156.23,
-    workspace: "janasmith.mobbin@gmail.com's Expensify",
-    category: 'Technology',
-    tag: 'AWS',
-    description: 'Cloud Infrastructure',
-    status: 'Approved',
-    receipt: {
-      url: '/mock-receipt-aws.pdf',
-      type: 'pdf'
-    },
-    submittedBy: {
-      name: 'Jana Smith',
-      initial: 'J'
-    }
-  },
-  {
-    id: 'exp_006',
-    date: '2024-05-13',
-    merchant: 'Office Depot',
-    amount: 89.45,
-    workspace: "janasmith.mobbin@gmail.com's Expensify",
-    category: 'Office Supplies',
-    tag: 'SUPPLIES',
-    description: 'Office Equipment',
-    status: 'Rejected',
-    receipt: {
-      url: '/mock-receipt-office-depot.jpg',
+      url: MOCK_RECEIPTS[3].url,
       type: 'image'
     },
     submittedBy: {
@@ -127,8 +90,46 @@ const mockExpensesData: ExpenseData[] = [
     }
   },
   {
+    id: 'exp_005',
+    date: '2024-03-19',
+    merchant: 'Uber Eats',
+    amount: 46.84,
+    workspace: "janasmith.mobbin@gmail.com's Expensify",
+    category: 'Meals & Entertainment',
+    tag: 'TEAM',
+    description: 'Team Lunch Order',
+    status: 'Approved',
+    receipt: {
+      url: MOCK_RECEIPTS[4].url,
+      type: 'image'
+    },
+    submittedBy: {
+      name: 'Jana Smith',
+      initial: 'J'
+    }
+  },
+  {
+    id: 'exp_006',
+    date: '2024-03-20',
+    merchant: 'Office Depot',
+    amount: 89.45,
+    workspace: "janasmith.mobbin@gmail.com's Expensify",
+    category: 'Office Supplies',
+    tag: 'SUPPLIES',
+    description: 'Office Equipment',
+    status: 'Rejected',
+    receipt: {
+      url: MOCK_RECEIPTS[0].url, // Cycling back to Starbucks receipt
+      type: 'image'
+    },
+    submittedBy: {
+      name: 'Mike Wilson',
+      initial: 'M'
+    }
+  },
+  {
     id: 'exp_007',
-    date: '2024-05-12',
+    date: '2024-03-21',
     merchant: 'Hotel Continental',
     amount: 320.00,
     workspace: "janasmith.mobbin@gmail.com's Expensify",
@@ -137,8 +138,8 @@ const mockExpensesData: ExpenseData[] = [
     description: 'Business Trip Accommodation',
     status: 'Approved',
     receipt: {
-      url: '/mock-receipt-hotel.pdf',
-      type: 'pdf'
+      url: MOCK_RECEIPTS[1].url, // Whole Foods receipt
+      type: 'image'
     },
     submittedBy: {
       name: 'Jana Smith',
@@ -179,7 +180,7 @@ export function ExpensePage({ className }: ExpensePageProps) {
       description: data.description || `${data.merchant} expense`,
       status: 'Processing', // New expenses start as processing
       receipt: {
-        url: '/mock-receipt-new.jpg',
+        url: MOCK_RECEIPTS[Math.floor(Math.random() * MOCK_RECEIPTS.length)].url,
         type: 'image'
       },
       submittedBy: {

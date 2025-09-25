@@ -1,5 +1,6 @@
 import React from 'react';
 import { Edit, Eye, Image, FileText } from 'lucide-react';
+import { ReceiptImage } from '@/components/common/receipt-image';
 import { cn } from '@/lib/utils';
 
 // Composite Components Level: Complex components built from base components
@@ -55,7 +56,8 @@ export function ExpenseTableRow({
   };
 
   const getStatusBadge = (status: ExpenseData['status']) => {
-    const baseClasses = 'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium';
+    const baseClasses =
+      'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium';
 
     switch (status) {
       case 'Processing':
@@ -63,7 +65,10 @@ export function ExpenseTableRow({
       case 'Approved':
         return cn(baseClasses, 'bg-blue-50 text-blue-600');
       case 'Pending':
-        return cn(baseClasses, 'bg-blue-50 text-blue-600 border border-blue-200');
+        return cn(
+          baseClasses,
+          'bg-blue-50 text-blue-600 border border-blue-200'
+        );
       case 'Rejected':
         return cn(baseClasses, 'bg-blue-100 text-blue-700');
       default:
@@ -116,38 +121,18 @@ export function ExpenseTableRow({
       {/* Merchant with Receipt Thumbnail */}
       <td className="px-3 py-4 text-sm">
         <div className="flex items-center gap-3">
-          {expense.receipt?.url ? (
-            <div className="relative group">
-              <button
-                onClick={handleReceiptClick}
-                className="w-10 h-10 rounded-lg border-2 border-gray-200 hover:border-blue-300 overflow-hidden transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                title="View receipt"
-              >
-                <img
-                  src={expense.receipt.url}
-                  alt="Receipt thumbnail"
-                  className="w-full h-full object-cover"
-                />
-              </button>
-              <div className="absolute -top-1 -right-1 w-4 h-4 bg-blue-100 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <Eye className="w-2.5 h-2.5 text-blue-600" />
-              </div>
-            </div>
-          ) : expense.receipt ? (
-            <button
-              onClick={handleReceiptClick}
-              className="w-10 h-10 bg-blue-50 hover:bg-blue-100 rounded-lg border border-blue-200 flex items-center justify-center transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              title="View receipt"
-            >
-              <FileText className="w-4 h-4 text-blue-600" />
-            </button>
-          ) : (
-            <div className="w-10 h-10 bg-gray-100 rounded-lg border border-gray-200 flex items-center justify-center">
-              <Image className="w-4 h-4 text-gray-400" />
-            </div>
-          )}
+          <ReceiptImage
+            receiptUrl={expense.receipt?.url}
+            receiptType={expense.receipt?.type}
+            merchantName={expense.merchant}
+            amount={expense.amount}
+            size="small"
+            showPreview={true}
+          />
           <div className="flex flex-col min-w-0 flex-1">
-            <span className="text-gray-900 font-medium truncate">{expense.merchant}</span>
+            <span className="text-gray-900 font-medium truncate">
+              {expense.merchant}
+            </span>
             <div className="flex items-center gap-2 mt-1">
               <span className={getStatusBadge(expense.status)}>
                 {expense.status}
@@ -190,9 +175,7 @@ export function ExpenseTableRow({
 
       {/* Tag */}
       <td className="px-3 py-4 text-sm">
-        {expense.tag && (
-          <span className="text-gray-900">{expense.tag}</span>
-        )}
+        {expense.tag && <span className="text-gray-900">{expense.tag}</span>}
       </td>
 
       {/* Description */}

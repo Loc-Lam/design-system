@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mock Receipt Generator</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            background-color: #f5f5f5;
+            padding: 20px;
+            margin: 0;
+        }
+
+        .receipt-container {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            margin: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            max-width: 300px;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .receipt {
+            background: white;
+            padding: 20px;
+            width: 280px;
+            font-family: 'Courier New', monospace;
+            font-size: 11px;
+            line-height: 1.3;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .receipt-header {
+            text-align: center;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed #333;
+            padding-bottom: 10px;
+        }
+
+        .store-name {
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+
+        .store-address {
+            font-size: 10px;
+            color: #666;
+        }
+
+        .receipt-info {
+            margin: 15px 0;
+            font-size: 10px;
+        }
+
+        .items {
+            margin: 15px 0;
+        }
+
+        .item {
+            display: flex;
+            justify-content: space-between;
+            margin: 3px 0;
+        }
+
+        .item-name {
+            flex: 1;
+        }
+
+        .item-price {
+            margin-left: 10px;
+        }
+
+        .totals {
+            border-top: 1px dashed #333;
+            padding-top: 10px;
+            margin-top: 15px;
+        }
+
+        .total-line {
+            display: flex;
+            justify-content: space-between;
+            margin: 3px 0;
+        }
+
+        .total-final {
+            font-weight: bold;
+            border-top: 1px solid #333;
+            padding-top: 5px;
+            margin-top: 5px;
+        }
+
+        .receipt-footer {
+            text-align: center;
+            margin-top: 15px;
+            border-top: 1px dashed #333;
+            padding-top: 10px;
+            font-size: 9px;
+        }
+
+        .controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            z-index: 1000;
+        }
+
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            margin: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <h3>Receipt Generator</h3>
+        <button onclick="generateAllReceipts()">Generate All Receipts</button>
+        <button onclick="downloadAllImages()">Download All Images</button>
+        <div style="margin-top: 10px; font-size: 11px;">
+            Right-click on receipts → "Save as" to download individual images
+        </div>
+    </div>
+
+    <!-- Receipt Templates -->
+    <div class="receipt-container" id="receipt-1">
+        <div class="receipt">
+            <div class="receipt-header">
+                <div class="store-name">STARBUCKS COFFEE</div>
+                <div class="store-address">
+                    123 Main Street<br>
+                    Seattle, WA 98101<br>
+                    (206) 555-0123
+                </div>
+            </div>
+
+            <div class="receipt-info">
+                Date: 03/15/2024 09:23:45<br>
+                Store #: 1234<br>
+                Register: 2<br>
+                Cashier: Sarah M.
+            </div>
+
+            <div class="items">
+                <div class="item">
+                    <span class="item-name">Grande Latte</span>
+                    <span class="item-price">$5.45</span>
+                </div>
+                <div class="item">
+                    <span class="item-name">Blueberry Muffin</span>
+                    <span class="item-price">$3.25</span>
+                </div>
+                <div class="item">
+                    <span class="item-name">Extra Shot</span>
+                    <span class="item-price">$0.75</span>
+                </div>
+            </div>
+
+            <div class="totals">
+                <div class="total-line">
+                    <span>Subtotal:</span>
+                    <span>$9.45</span>
+                </div>
+                <div class="total-line">
+                    <span>Tax:</span>
+                    <span>$0.85</span>
+                </div>
+                <div class="total-line total-final">
+                    <span>TOTAL:</span>
+                    <span>$10.30</span>
+                </div>
+            </div>
+
+            <div class="receipt-info" style="margin-top: 15px;">
+                Payment Method: Credit Card<br>
+                Card: **** **** **** 1234<br>
+                Auth Code: 123456
+            </div>
+
+            <div class="receipt-footer">
+                Thank you for choosing Starbucks!<br>
+                Visit us at starbucks.com<br>
+                * * * CUSTOMER COPY * * *
+            </div>
+        </div>
+    </div>
+
+    <div class="receipt-container" id="receipt-2">
+        <div class="receipt">
+            <div class="receipt-header">
+                <div class="store-name">WHOLE FOODS MARKET</div>
+                <div class="store-address">
+                    456 Oak Avenue<br>
+                    Portland, OR 97201<br>
+                    (503) 555-0456
+                </div>
+            </div>
+
+            <div class="receipt-info">
+                Date: 03/16/2024 14:15:30<br>
+                Store #: 5678<br>
+                Cashier: Mike T.<br>
+                Transaction: 987654321
+            </div>
+
+            <div class="items">
+                <div class="item">
+                    <span class="item-name">Organic Bananas (3 lbs)</span>
+                    <span class="item-price">$4.47</span>
+                </div>
+                <div class="item">
+                    <span class="item-name">Almond Milk</span>
+                    <span class="item-price">$3.99</span>
+                </div>
+                <div class="item">
+                    <span class="item-name">Whole Grain Bread</span>
+                    <span class="item-price">$4.49</span>
+                </div>
+                <div class="item">
+                    <span class="item-name">Greek Yogurt (4-pack)</span>
+                    <span class="item-price">$5.99</span>
+                </div>
+                <div class="item">
+                    <span class="item-name">Organic Spinach</span>
+                    <span class="item-price">$2.99</span>
+                </div>
+            </div>
+
+            <div class="totals">
+                <div class="total-line">
+                    <span>Subtotal:</span>
+                    <span>$21.93</span>
+                </div>
+                <div class="total-line">
+                    <span>Member Savings:</span>
+                    <span>-$2.15</span>
+                </div>
+                <div class="total-line">
+                    <span>Tax:</span>
+                    <span>$0.00</span>
+                </div>
+                <div class="total-line total-final">
+                    <span>TOTAL:</span>
+                    <span>$19.78</span>
+                </div>
+            </div>
+
+            <div class="receipt-info" style="margin-top: 15px;">
+                Payment: Debit Card<br>
+                Account: ****9876<br>
+                You saved $2.15 today!
+            </div>
+
+            <div class="receipt-footer">
+                Thank you for shopping with us!<br>
+                wholefoodsmarket.com<br>
+                * * * CUSTOMER COPY * * *
+            </div>
+        </div>
+    </div>
+
+    <div class="receipt-container" id="receipt-3">
+        <div class="receipt">
+            <div class="receipt-header">
+                <div class="store-name">SHELL GAS STATION</div>
+                <div class="store-address">
+                    789 Highway 101<br>
+                    San Francisco, CA 94102<br>
+                    (415) 555-0789
+                </div>
+            </div>
+
+            <div class="receipt-info">
+                Date: 03/17/2024 16:42:12<br>
+                Station ID: 9876<br>
+                Pump: 3<br>
+                Attendant: Auto
+            </div>
+
+            <div class="items">
+                <div class="item">
+                    <span class="item-name">Regular Unleaded</span>
+                    <span class="item-price"></span>
+                </div>
+                <div class="item">
+                    <span class="item-name">12.45 Gallons @ $3.89/gal</span>
+                    <span class="item-price">$48.43</span>
+                </div>
+                <div class="item">
+                    <span class="item-name">Car Wash Basic</span>
+                    <span class="item-price">$8.99</span>
+                </div>
+            </div>
+
+            <div class="totals">
+                <div class="total-line">
+                    <span>Subtotal:</span>
+                    <span>$57.42</span>
+                </div>
+                <div class="total-line">
+                    <span>Tax:</span>
+                    <span>$0.00</span>
+                </div>
+                <div class="total-line total-final">
+                    <span>TOTAL:</span>
+                    <span>$57.42</span>
+                </div>
+            </div>
+
+            <div class="receipt-info" style="margin-top: 15px;">
+                Payment: Credit Card<br>
+                Card: Visa ****2468<br>
+                Fuel Rewards Member
+            </div>
+
+            <div class="receipt-footer">
+                Thank you for choosing Shell!<br>
+                www.shell.com<br>
+                * * * CUSTOMER COPY * * *
+            </div>
+        </div>
+    </div>
+
+    <div class="receipt-container" id="receipt-4">
+        <div class="receipt">
+            <div class="receipt-header">
+                <div class="store-name">BEST BUY</div>
+                <div class="store-address">
+                    321 Tech Boulevard<br>
+                    Austin, TX 78701<br>
+                    (512) 555-0321
+                </div>
+            </div>
+
+            <div class="receipt-info">
+                Date: 03/18/2024 11:28:15<br>
+                Store #: 4567<br>
+                Register: 5<br>
+                Associate: Jennifer L.<br>
+                Transaction: 456789123
+            </div>
+
+            <div class="items">
+                <div class="item">
+                    <span class="item-name">USB-C Cable (6ft)</span>
+                    <span class="item-price">$19.99</span>
+                </div>
+                <div class="item">
+                    <span class="item-name">Wireless Mouse</span>
+                    <span class="item-price">$29.99</span>
+                </div>
+                <div class="item">
+                    <span class="item-name">Screen Protector</span>
+                    <span class="item-price">$12.99</span>
+                </div>
+            </div>
+
+            <div class="totals">
+                <div class="total-line">
+                    <span>Subtotal:</span>
+                    <span>$62.97</span>
+                </div>
+                <div class="total-line">
+                    <span>Tax:</span>
+                    <span>$5.14</span>
+                </div>
+                <div class="total-line total-final">
+                    <span>TOTAL:</span>
+                    <span>$68.11</span>
+                </div>
+            </div>
+
+            <div class="receipt-info" style="margin-top: 15px;">
+                Payment: Credit Card<br>
+                Card: MasterCard ****5678<br>
+                My Best Buy Member
+            </div>
+
+            <div class="receipt-footer">
+                Thank you for shopping at Best Buy!<br>
+                bestbuy.com | 1-888-BESTBUY<br>
+                * * * CUSTOMER COPY * * *
+            </div>
+        </div>
+    </div>
+
+    <div class="receipt-container" id="receipt-5">
+        <div class="receipt">
+            <div class="receipt-header">
+                <div class="store-name">UBER EATS</div>
+                <div class="store-address">
+                    Order from: Tony's Pizza<br>
+                    123 Food Street<br>
+                    Chicago, IL 60601
+                </div>
+            </div>
+
+            <div class="receipt-info">
+                Order Date: 03/19/2024 19:35:22<br>
+                Order #: UE-789456123<br>
+                Delivery Address:<br>
+                456 Home Ave, Apt 3B<br>
+                Chicago, IL 60602
+            </div>
+
+            <div class="items">
+                <div class="item">
+                    <span class="item-name">Margherita Pizza (Large)</span>
+                    <span class="item-price">$18.99</span>
+                </div>
+                <div class="item">
+                    <span class="item-name">Caesar Salad</span>
+                    <span class="item-price">$8.50</span>
+                </div>
+                <div class="item">
+                    <span class="item-name">Garlic Bread</span>
+                    <span class="item-price">$4.99</span>
+                </div>
+            </div>
+
+            <div class="totals">
+                <div class="total-line">
+                    <span>Subtotal:</span>
+                    <span>$32.48</span>
+                </div>
+                <div class="total-line">
+                    <span>Delivery Fee:</span>
+                    <span>$2.99</span>
+                </div>
+                <div class="total-line">
+                    <span>Service Fee:</span>
+                    <span>$1.95</span>
+                </div>
+                <div class="total-line">
+                    <span>Tip:</span>
+                    <span>$6.50</span>
+                </div>
+                <div class="total-line">
+                    <span>Tax:</span>
+                    <span>$2.92</span>
+                </div>
+                <div class="total-line total-final">
+                    <span>TOTAL:</span>
+                    <span>$46.84</span>
+                </div>
+            </div>
+
+            <div class="receipt-info" style="margin-top: 15px;">
+                Payment: Credit Card ****4321<br>
+                Driver: Alex M.<br>
+                Delivered: 20:15
+            </div>
+
+            <div class="receipt-footer">
+                Thank you for using Uber Eats!<br>
+                Rate your delivery in the app<br>
+                * * * ORDER RECEIPT * * *
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function generateAllReceipts() {
+            const receipts = document.querySelectorAll('.receipt-container');
+            receipts.forEach(receipt => {
+                receipt.style.display = 'block';
+            });
+
+            setTimeout(() => {
+                alert('All receipts generated! Right-click on each receipt and select "Save as" to download as images.');
+            }, 500);
+        }
+
+        function downloadAllImages() {
+            const receipts = document.querySelectorAll('.receipt-container');
+            receipts.forEach((container, index) => {
+                container.style.display = 'block';
+
+                // Use html2canvas to convert to image (you'd need to include the library)
+                // For now, just show instructions
+                setTimeout(() => {
+                    if (index === receipts.length - 1) {
+                        alert('To download images: Right-click on each receipt and select "Save as Image" or use browser screenshot tools.');
+                    }
+                }, 100);
+            });
+        }
+
+        // Auto-generate receipts on load
+        window.onload = function() {
+            generateAllReceipts();
+        };
+    </script>
+</body>
+</html>
