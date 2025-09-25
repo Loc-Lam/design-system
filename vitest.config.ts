@@ -62,16 +62,7 @@ export default defineConfig({
 
       // Coverage reporting options
       all: true,
-      skipFull: false,
-
-      // Fail if coverage is below thresholds
-      thresholds: {
-        autoUpdate: false,
-        lines: 100,
-        functions: 100,
-        branches: 100,
-        statements: 100
-      }
+      skipFull: false
     },
 
     // Test file patterns

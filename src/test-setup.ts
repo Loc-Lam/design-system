@@ -8,6 +8,7 @@
 import '@testing-library/jest-dom';
 import { cleanup } from '@testing-library/react';
 import { afterEach, beforeAll, afterAll } from 'vitest';
+import React from 'react';
 
 // Global test environment setup
 beforeAll(() => {
@@ -158,5 +159,5 @@ export const ThrowError = ({ shouldThrow }: { shouldThrow: boolean }) => {
   if (shouldThrow) {
     throw new Error('Test error');
   }
-  return <div>No error</div>;
+  return React.createElement('div', null, 'No error');
 };

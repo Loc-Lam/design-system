@@ -79,6 +79,7 @@ When invoked, you must follow these steps:
 - NO components without error handling
 - NO missing loading states for async operations
 - NO prop drilling beyond 2-3 levels
+- NO demo pages or demo components (use existing pages for integration)
 
 **ANTI-PATTERN ALERTS:**
 

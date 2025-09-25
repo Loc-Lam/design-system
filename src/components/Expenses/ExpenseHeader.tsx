@@ -3,13 +3,28 @@ import { Filter, Plus, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/common/button';
 import { ViewToggle, type ViewMode } from '@/components/common/view-toggle';
 import { NewExpenseDropdown, type ExpenseOption } from './NewExpenseDropdown';
-import { NewExpenseModal, type ExpenseFormData } from './NewExpenseModal';
+import { ExpenseCreateModal } from './ExpenseCreateModal';
 import { SmartScanFlow } from './SmartScanFlow';
 import { ExpenseFilterDrawer, type ExpenseFilterData } from './ExpenseFilterDrawer';
 import { cn } from '@/lib/utils';
 
 // Layout Components Level: Grid, container, and structural patterns
 // Following component hierarchy: Base → Layout
+
+export interface ExpenseFormData {
+  merchant: string;
+  date: Date;
+  taxType: string;
+  taxAmount: number;
+  total: number;
+  currency: string;
+  reimbursable: boolean;
+  category: string;
+  attendees: string[];
+  tag: string;
+  description: string;
+  report: string;
+}
 
 interface ExpenseHeaderProps {
   onNewExpense?: (data: ExpenseFormData) => void;
@@ -201,13 +216,10 @@ export function ExpenseHeader({
       />
 
       {/* New Expense Modal */}
-      <NewExpenseModal
+      <ExpenseCreateModal
         isOpen={showModal}
         onClose={handleModalClose}
         onSave={handleModalSave}
-        expenseType={selectedExpenseType}
-        selectedOption={selectedOption}
-        extractedData={extractedData || undefined}
       />
 
       {/* SmartScan Flow */}
