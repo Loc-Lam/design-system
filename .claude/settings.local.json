@@ -20,7 +20,9 @@
       "Bash(awk:*)",
       "Bash(tr:*)",
       "Bash(npm install)",
-      "Bash(npm cache clean:*)"
+      "Bash(npm cache clean:*)",
+      "mcp__figma-dev-mode-mcp-server__get_code_connect_map",
+      "Bash(npm run lint)"
     ],
     "deny": [],
     "ask": []

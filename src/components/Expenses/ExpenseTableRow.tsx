@@ -1,4 +1,5 @@
 import React from 'react';
+import { Edit, Eye, Image, FileText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 // Composite Components Level: Complex components built from base components
@@ -27,16 +28,30 @@ export interface ExpenseData {
 interface ExpenseTableRowProps {
   expense: ExpenseData;
   onRowClick?: (expense: ExpenseData) => void;
+  onRowEdit?: (expense: ExpenseData) => void;
+  onReceiptView?: (expense: ExpenseData) => void;
   className?: string;
 }
 
 export function ExpenseTableRow({
   expense,
   onRowClick,
+  onRowEdit,
+  onReceiptView,
   className,
 }: ExpenseTableRowProps) {
   const handleRowClick = () => {
     onRowClick?.(expense);
+  };
+
+  const handleEditClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onRowEdit?.(expense);
+  };
+
+  const handleReceiptClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onReceiptView?.(expense);
   };
 
   const getStatusBadge = (status: ExpenseData['status']) => {
@@ -98,16 +113,41 @@ export function ExpenseTableRow({
         </div>
       </td>
 
-      {/* Merchant with Receipt Icon */}
+      {/* Merchant with Receipt Thumbnail */}
       <td className="px-3 py-4 text-sm">
-        <div className="flex items-center gap-2">
-          {expense.receipt && (
-            <div className="w-8 h-8 bg-gray-100 rounded border flex items-center justify-center">
-              <div className="w-4 h-4 bg-gray-400 rounded-sm" />
+        <div className="flex items-center gap-3">
+          {expense.receipt?.url ? (
+            <div className="relative group">
+              <button
+                onClick={handleReceiptClick}
+                className="w-10 h-10 rounded-lg border-2 border-gray-200 hover:border-blue-300 overflow-hidden transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                title="View receipt"
+              >
+                <img
+                  src={expense.receipt.url}
+                  alt="Receipt thumbnail"
+                  className="w-full h-full object-cover"
+                />
+              </button>
+              <div className="absolute -top-1 -right-1 w-4 h-4 bg-blue-100 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                <Eye className="w-2.5 h-2.5 text-blue-600" />
+              </div>
+            </div>
+          ) : expense.receipt ? (
+            <button
+              onClick={handleReceiptClick}
+              className="w-10 h-10 bg-blue-50 hover:bg-blue-100 rounded-lg border border-blue-200 flex items-center justify-center transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              title="View receipt"
+            >
+              <FileText className="w-4 h-4 text-blue-600" />
+            </button>
+          ) : (
+            <div className="w-10 h-10 bg-gray-100 rounded-lg border border-gray-200 flex items-center justify-center">
+              <Image className="w-4 h-4 text-gray-400" />
             </div>
           )}
-          <div className="flex flex-col">
-            <span className="text-gray-900 font-medium">{expense.merchant}</span>
+          <div className="flex flex-col min-w-0 flex-1">
+            <span className="text-gray-900 font-medium truncate">{expense.merchant}</span>
             <div className="flex items-center gap-2 mt-1">
               <span className={getStatusBadge(expense.status)}>
                 {expense.status}
@@ -157,7 +197,18 @@ export function ExpenseTableRow({
 
       {/* Description */}
       <td className="px-3 py-4 text-sm pr-6">
-        <span className="text-gray-900">{expense.description}</span>
+        <div className="flex items-center justify-between">
+          <span className="text-gray-900">{expense.description}</span>
+          {onRowEdit && (
+            <button
+              onClick={handleEditClick}
+              className="ml-2 p-1 text-blue-600 hover:text-blue-700 hover:bg-blue-50 rounded-md transition-colors"
+              title="Edit expense"
+            >
+              <Edit className="w-4 h-4" />
+            </button>
+          )}
+        </div>
       </td>
     </tr>
   );

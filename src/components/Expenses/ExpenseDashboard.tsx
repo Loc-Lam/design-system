@@ -3,6 +3,9 @@ import { ExpenseHeader } from './ExpenseHeader';
 import { ExpenseTable } from './ExpenseTable';
 import type { ExpenseData } from './ExpenseTableRow';
 import type { ExpenseFormData, ExpenseFilterData } from './ExpenseHeader';
+import { SmartScanStatusIndicator, type SmartScanStatus } from './SmartScanStatusIndicator';
+import { SmartScanFlow } from './SmartScanFlow';
+import { EnhancedExpenseEditModal } from './EnhancedExpenseEditModal';
 import { cn } from '@/lib/utils';
 
 // Page Components Level: Full page compositions
@@ -17,7 +20,6 @@ interface ExpenseDashboardProps {
   };
   onNewExpense?: (data: ExpenseFormData) => void;
   onExpenseClick?: (expense: ExpenseData) => void;
-  onSidebarItemClick?: (item: any) => void;
   onSelectionChange?: (selectedIds: string[]) => void;
   onShowFilters?: () => void;
   onViewChange?: (view: 'list' | 'grid' | 'detailed') => void;
@@ -58,19 +60,15 @@ const defaultUser = {
 
 export function ExpenseDashboard({
   expenses = defaultExpenses,
-  userInfo = defaultUser,
   onNewExpense,
   onExpenseClick,
-  onSidebarItemClick,
   onSelectionChange,
   onShowFilters,
   onViewChange,
   initialView = 'list',
   initialShowFilters = false,
-  activeSection = 'expenses',
   className
 }: ExpenseDashboardProps) {
-  const [selectedExpenses, setSelectedExpenses] = useState<string[]>([]);
   const [currentView, setCurrentView] = useState<'list' | 'grid' | 'detailed'>(initialView);
   const [showFilters, setShowFilters] = useState(initialShowFilters);
   const [activeFilters, setActiveFilters] = useState<ExpenseFilterData>({
@@ -85,6 +83,14 @@ export function ExpenseDashboard({
     status: undefined,
   });
   const [filteredExpenses, setFilteredExpenses] = useState(expenses);
+
+  // SmartScan state
+  const [isSmartScanModalOpen, setIsSmartScanModalOpen] = useState(false);
+  const [smartScanStatuses, setSmartScanStatuses] = useState<SmartScanStatus[]>([]);
+
+  // Edit state
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingExpense, setEditingExpense] = useState<ExpenseData | null>(null);
 
   const applyFilters = (filters: ExpenseFilterData) => {
     let filtered = [...expenses];
@@ -190,9 +196,11 @@ export function ExpenseDashboard({
     onExpenseClick?.(expense);
   };
 
-  const handleSidebarItemClick = (item: any) => {
-    onSidebarItemClick?.(item);
+  const handleExpenseEdit = (expense: ExpenseData) => {
+    setEditingExpense(expense);
+    setIsEditModalOpen(true);
   };
+
 
   const handleSelectionChange = (selectedIds: string[]) => {
     setSelectedExpenses(selectedIds);
@@ -208,6 +216,26 @@ export function ExpenseDashboard({
   const handleViewChange = (view: 'list' | 'grid' | 'detailed') => {
     setCurrentView(view);
     onViewChange?.(view);
+  };
+
+  // SmartScan handlers
+
+
+  const handleDismissSmartScan = (scanId: string) => {
+    setSmartScanStatuses(prev => prev.filter(s => s.id !== scanId));
+    const completedScans = smartScanStatuses.filter(s =>
+      s.status === 'completed' || s.status === 'failed'
+    );
+    if (completedScans.some(s => s.id === scanId)) {
+      setSmartScanCount(prev => Math.max(0, prev - 1));
+    }
+  };
+
+  const handleSmartScanComplete = (extractedData: Record<string, unknown>) => {
+    console.log('SmartScan flow completed with data:', extractedData);
+    // Here you would typically create a new expense with the extracted data
+    // For now, we'll just log it and show a success message
+    alert(`Expense created successfully!\nMerchant: ${extractedData.merchant}\nAmount: $${extractedData.amount}`);
   };
 
   return (
@@ -233,6 +261,7 @@ export function ExpenseDashboard({
               <ExpenseTable
                 expenses={filteredExpenses}
                 onRowClick={handleExpenseClick}
+                onRowEdit={handleExpenseEdit}
                 onSelectionChange={handleSelectionChange}
                 className=""
               />
@@ -274,6 +303,47 @@ export function ExpenseDashboard({
           </div>
         </div>
       </div>
+
+      {/* SmartScan Flow */}
+      <SmartScanFlow
+        isOpen={isSmartScanModalOpen}
+        onClose={() => setIsSmartScanModalOpen(false)}
+        onComplete={handleSmartScanComplete}
+      />
+
+      {/* Enhanced Edit Expense Modal */}
+      <EnhancedExpenseEditModal
+        expense={editingExpense}
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onSave={(updatedExpense) => {
+          console.log('Saving expense changes for:', updatedExpense.id);
+          alert(`Expense "${updatedExpense.merchant}" updated successfully!`);
+          setIsEditModalOpen(false);
+        }}
+        onAttachExpense={() => {
+          console.log('Attach expense functionality');
+        }}
+        onSplitExpense={() => {
+          console.log('Split expense functionality');
+        }}
+        onDuplicate={() => {
+          console.log('Duplicate expense functionality');
+        }}
+        onDelete={() => {
+          if (editingExpense && confirm(`Delete expense "${editingExpense.merchant}"?`)) {
+            console.log('Deleting expense:', editingExpense.id);
+            setIsEditModalOpen(false);
+          }
+        }}
+      />
+
+      {/* SmartScan Status Indicator */}
+      <SmartScanStatusIndicator
+        scans={smartScanStatuses}
+        isVisible={smartScanStatuses.length > 0}
+        onDismiss={handleDismissSmartScan}
+      />
     </div>
   );
 }

@@ -1,5 +1,5 @@
-import React, { useState, useRef } from 'react';
-import { X, Calendar, ChevronDown, User, Receipt } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { X, Receipt } from 'lucide-react';
 import { Button } from '@/components/common/button';
 import { Select, SelectContent, SelectItem } from '@/components/ui/select';
 import { DatePicker } from '@/components/ui/date-picker';
@@ -28,6 +28,8 @@ interface NewExpenseModalProps {
   onClose: () => void;
   onSave: (data: ExpenseFormData) => void;
   expenseType?: 'expense' | 'distance' | 'multiple';
+  selectedOption?: string; // 'scan-receipt', 'manually-create', etc.
+  extractedData?: Record<string, unknown>; // Data from SmartScan flow
   className?: string;
 }
 
@@ -81,11 +83,15 @@ const taxTypes = [
   'Custom Rate'
 ];
 
+export type { ExpenseFormData };
+
 export function NewExpenseModal({
   isOpen,
   onClose,
   onSave,
   expenseType = 'expense',
+  selectedOption = 'manually-create',
+  extractedData,
   className
 }: NewExpenseModalProps) {
   const [activeTab, setActiveTab] = useState<'expense' | 'distance' | 'multiple'>(expenseType);
@@ -107,6 +113,20 @@ export function NewExpenseModal({
   const [merchantSuggestions, setMerchantSuggestions] = useState<string[]>([]);
   const [showMerchantSuggestions, setShowMerchantSuggestions] = useState(false);
   const merchantInputRef = useRef<HTMLInputElement>(null);
+
+  // Pre-populate form with extracted data from SmartScan
+  useEffect(() => {
+    if (extractedData) {
+      setFormData(prev => ({
+        ...prev,
+        merchant: extractedData.merchant || prev.merchant,
+        total: extractedData.amount || prev.total,
+        date: extractedData.date ? new Date(extractedData.date) : prev.date,
+        category: extractedData.category || prev.category,
+        description: extractedData.description || prev.description,
+      }));
+    }
+  }, [extractedData]);
 
   const handleInputChange = (field: keyof ExpenseFormData, value: any) => {
     setFormData(prev => ({ ...prev, [field]: value }));

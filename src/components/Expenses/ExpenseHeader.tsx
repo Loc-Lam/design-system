@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Filter, Plus, Grid3X3, MoreHorizontal, List, ChevronDown } from 'lucide-react';
+import { Filter, Plus, ChevronDown } from 'lucide-react';
 import { Button } from '@/components/common/button';
+import { ViewToggle, type ViewMode } from '@/components/common/view-toggle';
 import { NewExpenseDropdown, type ExpenseOption } from './NewExpenseDropdown';
 import { NewExpenseModal, type ExpenseFormData } from './NewExpenseModal';
+import { SmartScanFlow } from './SmartScanFlow';
 import { ExpenseFilterDrawer, type ExpenseFilterData } from './ExpenseFilterDrawer';
 import { cn } from '@/lib/utils';
 
@@ -12,11 +14,11 @@ import { cn } from '@/lib/utils';
 interface ExpenseHeaderProps {
   onNewExpense?: (data: ExpenseFormData) => void;
   onShowFilters?: () => void;
-  onViewChange?: (view: 'list' | 'grid' | 'detailed') => void;
+  onViewChange?: (view: ViewMode) => void;
   onApplyFilters?: (filters: ExpenseFilterData) => void;
   onClearFilters?: () => void;
   showFilters?: boolean;
-  currentView?: 'list' | 'grid' | 'detailed';
+  currentView?: ViewMode;
   activeFilters?: ExpenseFilterData;
   className?: string;
 }
@@ -27,16 +29,17 @@ export function ExpenseHeader({
   onViewChange,
   onApplyFilters,
   onClearFilters,
-  showFilters = false,
   currentView = 'list',
-  activeFilters = {},
+  activeFilters = { categories: [], tags: [] },
   className,
 }: ExpenseHeaderProps) {
-  const [filtersVisible, setFiltersVisible] = useState(showFilters);
   const [showDropdown, setShowDropdown] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showFilterDrawer, setShowFilterDrawer] = useState(false);
+  const [showSmartScanFlow, setShowSmartScanFlow] = useState(false);
   const [selectedExpenseType, setSelectedExpenseType] = useState<'expense' | 'distance' | 'multiple'>('expense');
+  const [selectedOption, setSelectedOption] = useState<string>('manually-create');
+  const [extractedData, setExtractedData] = useState<Record<string, unknown> | null>(null);
 
   const handleShowFilters = () => {
     setShowFilterDrawer(true);
@@ -65,7 +68,7 @@ export function ExpenseHeader({
     );
   };
 
-  const handleViewChange = (view: 'list' | 'grid' | 'detailed') => {
+  const handleViewChange = (view: ViewMode) => {
     onViewChange?.(view);
   };
 
@@ -74,7 +77,8 @@ export function ExpenseHeader({
   };
 
   const handleDropdownOptionSelect = (option: ExpenseOption) => {
-    console.log('Selected expense option:', option);
+    // Store the selected option
+    setSelectedOption(option.id);
 
     // Determine expense type based on option
     if (option.category === 'distance') {
@@ -85,18 +89,37 @@ export function ExpenseHeader({
       setSelectedExpenseType('expense');
     }
 
-    setShowModal(true);
+    // If scan receipt is selected, show SmartScan flow instead of modal
+    if (option.id === 'scan-receipt') {
+      setShowSmartScanFlow(true);
+    } else {
+      setShowModal(true);
+    }
+
     setShowDropdown(false);
   };
 
   const handleModalSave = (data: ExpenseFormData) => {
-    console.log('Saving expense data:', data);
     onNewExpense?.(data);
     setShowModal(false);
   };
 
   const handleModalClose = () => {
     setShowModal(false);
+  };
+
+  // SmartScan handlers
+  const handleSmartScanComplete = (extractedData: Record<string, unknown>) => {
+    // Store extracted data and show the form modal
+    setExtractedData(extractedData);
+    setShowSmartScanFlow(false);
+    setSelectedOption('manually-create'); // Switch to manual mode with pre-filled data
+    setShowModal(true);
+  };
+
+  const handleSmartScanClose = () => {
+    setShowSmartScanFlow(false);
+    setExtractedData(null);
   };
 
   return (
@@ -141,50 +164,12 @@ export function ExpenseHeader({
 
         {/* Right side - View toggles and New Expense button */}
         <div className="flex items-center gap-3">
+
           {/* View Toggle Buttons */}
-          <div className="flex items-center border border-gray-300 rounded-lg">
-            <button
-              onClick={() => handleViewChange('list')}
-              className={cn(
-                'p-2 rounded-l-lg transition-colors duration-200',
-                'hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500',
-                currentView === 'list'
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-600 hover:text-gray-900'
-              )}
-              title="List View"
-            >
-              <List className="w-4 h-4" />
-            </button>
-
-            <button
-              onClick={() => handleViewChange('grid')}
-              className={cn(
-                'p-2 transition-colors duration-200',
-                'hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500',
-                currentView === 'grid'
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-600 hover:text-gray-900'
-              )}
-              title="Grid View"
-            >
-              <Grid3X3 className="w-4 h-4" />
-            </button>
-
-            <button
-              onClick={() => handleViewChange('detailed')}
-              className={cn(
-                'p-2 rounded-r-lg transition-colors duration-200',
-                'hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500',
-                currentView === 'detailed'
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-600 hover:text-gray-900'
-              )}
-              title="Detailed View"
-            >
-              <MoreHorizontal className="w-4 h-4" />
-            </button>
-          </div>
+          <ViewToggle
+            currentView={currentView}
+            onViewChange={handleViewChange}
+          />
 
           {/* New Expense Button with Dropdown */}
           <div className="relative">
@@ -221,6 +206,15 @@ export function ExpenseHeader({
         onClose={handleModalClose}
         onSave={handleModalSave}
         expenseType={selectedExpenseType}
+        selectedOption={selectedOption}
+        extractedData={extractedData || undefined}
+      />
+
+      {/* SmartScan Flow */}
+      <SmartScanFlow
+        isOpen={showSmartScanFlow}
+        onClose={handleSmartScanClose}
+        onComplete={handleSmartScanComplete}
       />
     </div>
   );

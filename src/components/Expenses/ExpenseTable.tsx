@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronUp, ChevronDown } from 'lucide-react';
 import { ExpenseTableRow, type ExpenseData } from './ExpenseTableRow';
+import { ReceiptPreviewModal } from './ReceiptPreviewModal';
 import { cn } from '@/lib/utils';
 
 // Composite Components Level: Complex components built from base components
@@ -16,6 +17,7 @@ export interface ExpenseTableColumn {
 interface ExpenseTableProps {
   expenses: ExpenseData[];
   onRowClick?: (expense: ExpenseData) => void;
+  onRowEdit?: (expense: ExpenseData) => void;
   onSelectionChange?: (selectedIds: string[]) => void;
   columns?: ExpenseTableColumn[];
   className?: string;
@@ -42,26 +44,17 @@ interface SortConfig {
 export function ExpenseTable({
   expenses,
   onRowClick,
+  onRowEdit,
   onSelectionChange,
   columns = defaultColumns,
   className,
 }: ExpenseTableProps) {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [sortConfig, setSortConfig] = useState<SortConfig>({ key: null, direction: null });
+  const [previewExpense, setPreviewExpense] = useState<ExpenseData | null>(null);
+  const [isPreviewModalOpen, setIsPreviewModalOpen] = useState(false);
 
   // Handle individual row selection
-  const handleRowSelection = (expenseId: string, isSelected: boolean) => {
-    let newSelectedIds: string[];
-
-    if (isSelected) {
-      newSelectedIds = [...selectedIds, expenseId];
-    } else {
-      newSelectedIds = selectedIds.filter(id => id !== expenseId);
-    }
-
-    setSelectedIds(newSelectedIds);
-    onSelectionChange?.(newSelectedIds);
-  };
 
   // Handle select all
   const handleSelectAll = (isSelected: boolean) => {
@@ -108,6 +101,17 @@ export function ExpenseTable({
     return sortConfig.direction === 'asc'
       ? <ChevronUp className="w-4 h-4 text-blue-600" />
       : <ChevronDown className="w-4 h-4 text-blue-600" />;
+  };
+
+  // Handle receipt viewing
+  const handleReceiptView = (expense: ExpenseData) => {
+    setPreviewExpense(expense);
+    setIsPreviewModalOpen(true);
+  };
+
+  const handleClosePreview = () => {
+    setIsPreviewModalOpen(false);
+    setPreviewExpense(null);
   };
 
   return (
@@ -173,6 +177,8 @@ export function ExpenseTable({
                   key={expense.id}
                   expense={expense}
                   onRowClick={onRowClick}
+                  onRowEdit={onRowEdit}
+                  onReceiptView={handleReceiptView}
                 />
               ))
             )}
@@ -196,6 +202,14 @@ export function ExpenseTable({
           </div>
         </div>
       )}
+
+      {/* Receipt Preview Modal */}
+      <ReceiptPreviewModal
+        expense={previewExpense}
+        isOpen={isPreviewModalOpen}
+        onClose={handleClosePreview}
+        onEdit={onRowEdit}
+      />
     </div>
   );
 }
