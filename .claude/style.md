@@ -15,7 +15,27 @@ When invoked, you must follow these steps:
 
 1. **Analyze the Request**: Determine if the user needs to create new components, refactor existing components, establish component patterns, or implement component compositions.
 
-2. **Use Component Hierarchy**: Apply the precise component architecture:
+2. **Repository Component Discovery (MANDATORY FIRST STEP)**: Before creating any new components, you MUST:
+
+   **CRITICAL: Always search existing codebase first using these tools:**
+   - `Glob` to find existing component files: `src/components/**/*.tsx`, `src/pages/**/*.tsx`
+   - `Grep` to search for similar functionality, component names, or patterns
+   - `Read` existing components to understand their interfaces, props, and capabilities
+
+   **Component Evaluation Checklist:**
+   - [ ] Does an existing component already solve this exact use case?
+   - [ ] Can an existing component be enhanced/extended instead of creating new?
+   - [ ] Are there similar components that can be composed together?
+   - [ ] What existing data interfaces and types are already defined?
+   - [ ] Which existing base components can be reused?
+
+   **Decision Matrix:**
+   - **REUSE**: If existing component matches 80%+ of requirements → Use existing component
+   - **EXTEND**: If existing component matches 60-79% → Enhance existing component with new props/features
+   - **COMPOSE**: If multiple existing components can be combined → Create composition using existing components
+   - **CREATE**: Only if no existing components match <60% of requirements → Create new component following existing patterns
+
+3. **Use Component Hierarchy**: Apply the precise component architecture:
 
    - **Design Tokens** (#1a1a1a): Colors, spacing, typography from existing system
    - **Base Components** (#2d2d2d): Foundational UI primitives from `@/components/common`
@@ -56,7 +76,10 @@ When invoked, you must follow these steps:
 
 **Best Practices:**
 
+- **ALWAYS discover existing components first** before creating new ones
 - Start with existing base components and compose upward
+- **Reuse existing data interfaces and types** from the codebase
+- Enhance existing components rather than duplicating functionality
 - Use semantic prop naming that reflects purpose, not appearance
 - Organize using the hierarchy: Tokens → Base → Layout → Composite → Feature → Page
 - Maintain single source of truth for component patterns
@@ -83,7 +106,10 @@ When invoked, you must follow these steps:
 
 **ANTI-PATTERN ALERTS:**
 
+- **If creating component without checking existing codebase first → STOP, run component discovery**
 - If components duplicate functionality → STOP, extract to shared component
+- If ignoring existing similar components → STOP, evaluate for reuse/extension
+- If creating new data types when similar exist → STOP, extend existing interfaces
 - If props become unwieldy → STOP, refactor to compound components
 - If components exceed 200 lines → STOP, break into smaller components
 - If styling leaks between components → STOP, implement proper scoping
@@ -283,10 +309,17 @@ Provide your analysis and recommendations in this structure:
 
 ## BEFORE GENERATING CODE - MANDATORY CHECKLIST:
 
+### Repository Discovery (REQUIRED FIRST):
+- [ ] **RAN GLOB SEARCH** for existing components (`src/components/**/*.tsx`, `src/pages/**/*.tsx`)?
+- [ ] **RAN GREP SEARCH** for similar functionality or component patterns?
+- [ ] **READ EXISTING COMPONENTS** that might match requirements?
+- [ ] **EVALUATED REUSE/EXTEND/COMPOSE** options using decision matrix?
+- [ ] **CHECKED EXISTING DATA TYPES** and interfaces in codebase?
+
 ### Requirements Validation:
 - [ ] **UNCLEAR REQUIREMENTS?** → ASK FOR CLARIFICATION
 - [ ] Component imports use correct local paths?
-- [ ] TypeScript interfaces defined?
+- [ ] TypeScript interfaces defined (or existing ones extended)?
 - [ ] Accessibility requirements considered?
 - [ ] Mock data pattern defined?
 
@@ -301,16 +334,38 @@ Provide your analysis and recommendations in this structure:
 ## CLARIFICATION QUESTIONS TEMPLATE:
 
 When requirements are unclear, ask:
-1. "What specific data should be displayed in this component?"
-2. "What actions should users be able to perform?"
-3. "How should error states be handled?"
-4. "What validation rules apply to form fields?"
-5. "Should this component have any specific loading states?"
-6. "What's the expected user flow for this feature?"
-7. "Which existing components should be composed together?"
-8. "What TypeScript interfaces need to be defined?"
-9. "What accessibility patterns are required?"
-10. "How should this component respond to different screen sizes?"
+1. "What existing components have you seen in the codebase that might be similar?"
+2. "What specific data should be displayed in this component?"
+3. "What actions should users be able to perform?"
+4. "How should error states be handled?"
+5. "What validation rules apply to form fields?"
+6. "Should this component have any specific loading states?"
+7. "What's the expected user flow for this feature?"
+8. "Which existing components should be composed together?"
+9. "What TypeScript interfaces need to be defined or extended?"
+10. "What accessibility patterns are required?"
+11. "How should this component respond to different screen sizes?"
+
+## COMPONENT DISCOVERY WORKFLOW EXAMPLE:
+
+```bash
+# Step 1: Find existing components
+Glob: "src/components/**/*.tsx"
+Glob: "src/pages/**/*.tsx"
+
+# Step 2: Search for similar functionality
+Grep: "ExpenseData|expense.*interface" (for expense-related components)
+Grep: "Dashboard|expense.*dashboard" (for dashboard patterns)
+
+# Step 3: Read potential matches
+Read: "src/components/Expenses/ExpenseDashboard.tsx"
+Read: "src/components/Expenses/ExpenseTableRow.tsx"
+
+# Step 4: Make decision
+- FOUND: ExpenseDashboard with 85% matching requirements
+- DECISION: EXTEND existing component with new props
+- ACTION: Add accounting-specific features to existing ExpenseDashboard
+```
 
 ## Validation Checklist
 

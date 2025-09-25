@@ -1,6 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { ExpenseHeader } from './ExpenseHeader';
 import { ExpenseTable } from './ExpenseTable';
+import { ExpenseGridView } from './ExpenseGridView';
+import { ExpenseDetailedView } from './ExpenseDetailedView';
+import { ReceiptPreviewModal } from './ReceiptPreviewModal';
 import type { ExpenseData } from './ExpenseTableRow';
 import type { ExpenseFormData, ExpenseFilterData } from './ExpenseHeader';
 import { SmartScanStatusIndicator, type SmartScanStatus } from './SmartScanStatusIndicator';
@@ -91,6 +94,10 @@ export function ExpenseDashboard({
   // Edit state
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingExpense, setEditingExpense] = useState<ExpenseData | null>(null);
+
+  // Receipt preview state
+  const [isReceiptPreviewOpen, setIsReceiptPreviewOpen] = useState(false);
+  const [previewExpense, setPreviewExpense] = useState<ExpenseData | null>(null);
 
   const applyFilters = (filters: ExpenseFilterData) => {
     let filtered = [...expenses];
@@ -201,6 +208,16 @@ export function ExpenseDashboard({
     setIsEditModalOpen(true);
   };
 
+  const handleReceiptView = (expense: ExpenseData) => {
+    setPreviewExpense(expense);
+    setIsReceiptPreviewOpen(true);
+  };
+
+  const handleCloseReceiptPreview = () => {
+    setIsReceiptPreviewOpen(false);
+    setPreviewExpense(null);
+  };
+
 
   const handleSelectionChange = (selectedIds: string[]) => {
     setSelectedExpenses(selectedIds);
@@ -270,19 +287,23 @@ export function ExpenseDashboard({
 
           {currentView === 'grid' && (
             <div className="max-w-6xl mx-auto">
-              <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-                <h3 className="text-lg font-medium text-gray-900">Grid View</h3>
-                <p className="text-gray-600 mt-2">Grid view implementation would go here</p>
-              </div>
+              <ExpenseGridView
+                expenses={filteredExpenses}
+                onExpenseClick={handleExpenseClick}
+                onExpenseEdit={handleExpenseEdit}
+                onReceiptView={handleReceiptView}
+              />
             </div>
           )}
 
           {currentView === 'detailed' && (
             <div className="max-w-6xl mx-auto">
-              <div className="bg-white rounded-lg shadow-sm p-8 text-center">
-                <h3 className="text-lg font-medium text-gray-900">Detailed View</h3>
-                <p className="text-gray-600 mt-2">Detailed view implementation would go here</p>
-              </div>
+              <ExpenseDetailedView
+                expenses={filteredExpenses}
+                onExpenseClick={handleExpenseClick}
+                onExpenseEdit={handleExpenseEdit}
+                onReceiptView={handleReceiptView}
+              />
             </div>
           )}
         </div>
@@ -336,6 +357,14 @@ export function ExpenseDashboard({
             setIsEditModalOpen(false);
           }
         }}
+      />
+
+      {/* Receipt Preview Modal */}
+      <ReceiptPreviewModal
+        expense={previewExpense}
+        isOpen={isReceiptPreviewOpen}
+        onClose={handleCloseReceiptPreview}
+        onEdit={handleExpenseEdit}
       />
 
       {/* SmartScan Status Indicator */}
