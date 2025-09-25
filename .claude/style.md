@@ -29,11 +29,22 @@ When invoked, you must follow these steps:
    - [ ] What existing data interfaces and types are already defined?
    - [ ] Which existing base components can be reused?
 
-   **Decision Matrix:**
-   - **REUSE**: If existing component matches 80%+ of requirements → Use existing component
-   - **EXTEND**: If existing component matches 60-79% → Enhance existing component with new props/features
-   - **COMPOSE**: If multiple existing components can be combined → Create composition using existing components
-   - **CREATE**: Only if no existing components match <60% of requirements → Create new component following existing patterns
+   **Decision Matrix (CRITICAL - MUST FOLLOW):**
+   - **REUSE (80%+ match)**: If existing component matches 80%+ of requirements → Use existing component AS-IS
+     * Example: ExpensePage already has filtering, tables, modals → USE ExpensePage for accounting expenses
+     * Example: Button component handles all click interactions → USE Button, don't create AccountingButton
+
+   - **EXTEND (60-79% match)**: If existing component matches 60-79% → Enhance existing component with new props/features
+     * Example: ExpensePage needs tax tracking → ADD accounting props/features to existing ExpensePage
+     * Example: StatsCard needs trend indicators → EXTEND StatsCard with trend props
+
+   - **COMPOSE (40-59% match)**: If multiple existing components can be combined → Create composition using existing components
+     * Example: Dashboard = ExpenseHeader + ExpenseTable + ExpenseFilters (all existing)
+     * Example: AccountingPage = PeriodSelector + MetricsCards + ExpenseDashboard (reuse ExpenseDashboard)
+
+   - **CREATE (<40% match)**: Only if no existing components match <40% of requirements → Create new component following existing patterns
+     * This should be RARE - most functionality already exists in some form
+     * Must justify why existing components cannot be reused/extended/composed
 
 3. **Use Component Hierarchy**: Apply the precise component architecture:
 
@@ -104,17 +115,44 @@ When invoked, you must follow these steps:
 - NO prop drilling beyond 2-3 levels
 - NO demo pages or demo components (use existing pages for integration)
 
-**ANTI-PATTERN ALERTS:**
+**ANTI-PATTERN ALERTS (MANDATORY STOPS):**
 
-- **If creating component without checking existing codebase first → STOP, run component discovery**
-- If components duplicate functionality → STOP, extract to shared component
-- If ignoring existing similar components → STOP, evaluate for reuse/extension
-- If creating new data types when similar exist → STOP, extend existing interfaces
-- If props become unwieldy → STOP, refactor to compound components
-- If components exceed 200 lines → STOP, break into smaller components
-- If styling leaks between components → STOP, implement proper scoping
-- If accessibility is missing → STOP, add proper ARIA and keyboard support
-- If TypeScript types are `any` → STOP, define proper interfaces
+- **❌ CRITICAL: Creating component without checking existing codebase first**
+  * **STOP**: Run component discovery with Glob/Grep/Read tools
+  * **VIOLATION EXAMPLE**: Creating AccountingExpensePage when ExpensePage already exists with 85%+ functionality match
+  * **CORRECT ACTION**: Use existing ExpensePage and add accounting enhancements
+
+- **❌ CRITICAL: Duplicating existing functionality**
+  * **STOP**: Extract to shared component or extend existing
+  * **VIOLATION EXAMPLE**: Creating new expense table when ExpenseTable already exists
+  * **CORRECT ACTION**: Enhance ExpenseTable with new props/features
+
+- **❌ CRITICAL: Ignoring existing similar components**
+  * **STOP**: Evaluate for reuse/extension using Decision Matrix
+  * **VIOLATION EXAMPLE**: Building from scratch when 80%+ functionality exists
+  * **CORRECT ACTION**: Follow REUSE → EXTEND → COMPOSE → CREATE hierarchy
+
+- **❌ Creating new data types when similar exist**
+  * **STOP**: Extend existing interfaces with accounting-specific fields
+  * **VIOLATION EXAMPLE**: Creating AccountingExpenseData from scratch when ExpenseData exists
+  * **CORRECT ACTION**: `interface AccountingExpenseData extends ExpenseData { taxStatus?: string; }`
+
+- **❌ Page-level components exceeding 300 lines**
+  * **STOP**: Break into smaller components or reuse existing ones
+  * **VIOLATION EXAMPLE**: 500-line AccountingExpensePage recreating ExpensePage functionality
+  * **CORRECT ACTION**: Compose existing components + small enhancements
+
+- **❌ Props becoming unwieldy (10+ props)**
+  * **STOP**: Refactor to compound components or extend existing component interfaces
+
+- **❌ Styling leaking between components**
+  * **STOP**: Implement proper scoping with blue color system
+
+- **❌ Missing accessibility**
+  * **STOP**: Add proper ARIA and keyboard support
+
+- **❌ TypeScript types using `any`**
+  * **STOP**: Define proper interfaces that extend existing types
 
 **COMPONENT BOUNDARY ENFORCEMENT:**
 
@@ -309,12 +347,30 @@ Provide your analysis and recommendations in this structure:
 
 ## BEFORE GENERATING CODE - MANDATORY CHECKLIST:
 
-### Repository Discovery (REQUIRED FIRST):
+### Repository Discovery (REQUIRED FIRST - CANNOT SKIP):
 - [ ] **RAN GLOB SEARCH** for existing components (`src/components/**/*.tsx`, `src/pages/**/*.tsx`)?
 - [ ] **RAN GREP SEARCH** for similar functionality or component patterns?
 - [ ] **READ EXISTING COMPONENTS** that might match requirements?
 - [ ] **EVALUATED REUSE/EXTEND/COMPOSE** options using decision matrix?
 - [ ] **CHECKED EXISTING DATA TYPES** and interfaces in codebase?
+
+### Decision Matrix Validation (CRITICAL):
+- [ ] **IDENTIFIED MATCH PERCENTAGE**: What % of requirements does existing component meet?
+- [ ] **JUSTIFIED DECISION**: Why REUSE/EXTEND/COMPOSE/CREATE was chosen?
+- [ ] **DOCUMENTED EXISTING FUNCTIONALITY**: What already exists that can be leveraged?
+- [ ] **PLANNED ENHANCEMENT STRATEGY**: How to add new features without duplication?
+
+### Anti-Pattern Prevention:
+- [ ] **NO DUPLICATE FUNCTIONALITY**: Not recreating existing component capabilities?
+- [ ] **NO PARALLEL IMPLEMENTATIONS**: Not building similar features from scratch?
+- [ ] **NO DATA TYPE DUPLICATION**: Extending existing interfaces instead of creating new ones?
+- [ ] **NO PAGE-LEVEL RECREATION**: Not rebuilding existing page functionality?
+
+### Component Reuse Verification:
+- [ ] **MAXIMUM REUSE ACHIEVED**: Using as much existing functionality as possible?
+- [ ] **MINIMAL NEW CODE**: Only creating truly new functionality?
+- [ ] **INTERFACE CONSISTENCY**: Following existing patterns and props?
+- [ ] **BACKWARD COMPATIBILITY**: Not breaking existing component usage?
 
 ### Requirements Validation:
 - [ ] **UNCLEAR REQUIREMENTS?** → ASK FOR CLARIFICATION
@@ -363,9 +419,13 @@ Read: "src/components/Expenses/ExpenseTableRow.tsx"
 
 # Step 4: Make decision
 - FOUND: ExpenseDashboard with 85% matching requirements
-- DECISION: EXTEND existing component with new props
-- ACTION: Add accounting-specific features to existing ExpenseDashboard
-```
+- DECISION: REUSE existing component (80%+ match)
+
+**Key Principles Demonstrated:**
+- **REUSE**: ExpenseDashboard handles all existing expense functionality
+- **EXTEND**: Enhanced data model with accounting fields
+- **COMPOSE**: New metrics + existing dashboard
+- **Consistency**: Users get familiar UX with new accounting features
 
 ## Validation Checklist
 

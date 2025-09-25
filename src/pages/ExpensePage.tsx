@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ExpenseDashboard } from '@/components/Expenses';
 import type { ExpenseData } from '@/components/Expenses';
 import type { ExpenseFormData } from '@/components/Expenses/ExpenseHeader';
@@ -156,10 +156,8 @@ const mockUserInfo = {
 
 export function ExpensePage({ className }: ExpensePageProps) {
   const [expenses, setExpenses] = useState<ExpenseData[]>(mockExpensesData);
-  const [selectedExpenseIds, setSelectedExpenseIds] = useState<string[]>([]);
   const [currentView, setCurrentView] = useState<'list' | 'grid' | 'detailed'>('list');
   const [showFilters, setShowFilters] = useState(false);
-  const [currentSection, setCurrentSection] = useState<string>('expenses');
 
   // Handle expense creation
   const handleNewExpense = (data: ExpenseFormData) => {
@@ -203,20 +201,8 @@ export function ExpensePage({ className }: ExpensePageProps) {
     alert(`Viewing details for expense: ${expense.merchant} - $${expense.amount}`);
   };
 
-  // Handle sidebar navigation
-  const handleSidebarNavigation = (item: any) => {
-    setCurrentSection(item.id);
-    console.log('Navigating to section:', item.id);
-
-    // In a real app, this would handle routing to different sections
-    if (item.id !== 'expenses') {
-      alert(`Navigation to ${item.label} section would be implemented here`);
-    }
-  };
-
   // Handle expense selection changes
   const handleSelectionChange = (selectedIds: string[]) => {
-    setSelectedExpenseIds(selectedIds);
     console.log('Selected expenses:', selectedIds);
   };
 
@@ -235,16 +221,13 @@ export function ExpensePage({ className }: ExpensePageProps) {
   return (
     <ExpenseDashboard
       expenses={expenses}
-      userInfo={mockUserInfo}
       onNewExpense={handleNewExpense}
       onExpenseClick={handleExpenseClick}
-      onSidebarItemClick={handleSidebarNavigation}
       onSelectionChange={handleSelectionChange}
       onShowFilters={handleShowFilters}
       onViewChange={handleViewChange}
       initialView={currentView}
       initialShowFilters={showFilters}
-      activeSection={currentSection}
       className={className}
     />
   );
